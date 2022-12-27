@@ -11,14 +11,12 @@ namespace RLEngine.Server
     public class GameServer
     {
 
-        const int TileSize = 16;
-        const int DrawDistance = 6;
-        const int GameSpeed = 250;
+        public const int TileSize = 16;
+        public const int DrawDistance = 12;
+        public const int GameSpeed = 250;
 
 
         private readonly GameContext GameContext;
-        private readonly IServiceScopeFactory ScopeFactory;
-
         public System.Timers.Timer GameTimer { get; private set; }
         private IGameBoard GameBoard { get; set; }
         private IGameLoop GameLoop { get; set; }

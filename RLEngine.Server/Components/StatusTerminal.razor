@@ -1,0 +1,23 @@
+@using RLEngine.Server
+@using RLEngine.Core
+@inject RLEngine.Server.GameServer GameServer
+
+<div class="terminalCell">
+@GameServer.GameTick
+(@Player?.X / @Player?.Y) Last Action: @LastAction
+</div>
+
+@code {
+
+
+    [Parameter]
+    public IGameObject? Player {get;set;} = null ;
+
+    [Parameter]
+    public string LastAction {get;set;} = "" ;
+
+    [Parameter]
+    public string TerminalWidth {get;set;} = $"{30-(GameServer.DrawDistance * 2 + 4)}em";
+
+
+}

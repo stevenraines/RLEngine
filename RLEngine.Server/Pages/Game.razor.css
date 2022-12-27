@@ -1,0 +1,21 @@
+.terminalContainer {
+    background-color: #111;
+    margin: 0px;
+    display: grid;
+    grid-template-columns: 250px max-content auto;
+    font-family: monospace;
+    color: #fff;
+    font-size: 12px;
+    padding: 0px;
+    grid-template-rows: 8vh 25vh max-content 6vh max-content;
+    overflow: hidden;
+    caret-color: transparent;
+    outline: none;
+    cursor: none;
+}
+
+.terminalCell {
+    padding: 5px;
+    border: 1px solid #fff;
+
+}

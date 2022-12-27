@@ -15,9 +15,9 @@ namespace RLEngine.Core
 
         public GameBoardView(IGameBoard gameBoard, int startX, int startY, int widthX, int widthY, int z)
         {
-            for (var xPos = startX; xPos < widthX; xPos++)
+            for (var xPos = startX; xPos < startX + widthX + 1; xPos++)
             {
-                for (var yPos = startY; yPos < widthY; yPos++)
+                for (var yPos = startY; yPos < startY + widthY + 1; yPos++)
                 {
                     Positions.Add(gameBoard.GetGameBoardPosition(xPos, yPos, z));
                 }

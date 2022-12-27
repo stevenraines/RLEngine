@@ -2,37 +2,33 @@
 
 <PageTitle>Main Game</PageTitle>
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-
+@using RLEngine.Server.Components
 @using RLEngine.Server
 @using RLEngine.Core
 @inject RLEngine.Server.GameServer GameServer
 @inject ProtectedLocalStorage protectedLocalStorage
 
-<div style="border: 1px solid #000;" @ref="keyRef" tabindex="0" @onkeydown="HandleKeyDown">
-@GameServer.GameTick
-@pressedKey - @playerId - @player?.X : @player?.Y
-<pre>@playerBoardView</pre>
+<div class="terminalContainer" @ref="keyRef" tabindex="0" @onkeydown="HandleKeyDown">
+    <div class="terminalCell" style="grid-column: span 3;">Header</div>
+    <div class="terminalCell">Area A</div>
+    <GameTerminal Player="@player" PlayerBoardView="@playerBoardView"></GameTerminal>
+    <div style="grid-row: span 2;" class="terminalCell">Info Panel</div>
+    <div class="terminalCell">Area B</div>
+    <StatusTerminal Player="@player" LastAction="@pressedKey"></StatusTerminal>
+    <div style="grid-column: span 3;"></div>
 </div>
 
 @code {
 
+    private System.Threading.Timer? timer = null;
+    private long lastTick;
+    private string playerBoardView = "";
     private ElementReference keyRef;
     private string pressedKey = "";
-    System.Threading.Timer? timer = null;
-    long lastTick;
-    string playerBoardView = "";
-    string oldPlayerBoardView = "";
+
+
     Guid? playerId = null;
-    IGameObject? player;
-
-    private void HandleKeyDown(KeyboardEventArgs e)
-    {
-        pressedKey = e.Key;
-        if(player != null){
-            GameServer.IssuePlayerCommand(player,pressedKey);
-        }
-
-    }
+    private IGameObject? player;
 
     protected override void OnInitialized()
     {
@@ -42,12 +38,9 @@
 
             if(GameServer.GameTick <= lastTick) return;
 
-            oldPlayerBoardView = playerBoardView;
-
             if(player != null){
                 playerBoardView =  GameServer.RenderStringView(player.X,player.Y,player.Z);
 
-            if(oldPlayerBoardView != playerBoardView)
                 // we need StateHasChanged() because this is an async void handler
                 // we need to Invoke it because we could be on the wrong Thread
                 await InvokeAsync(StateHasChanged);
@@ -84,6 +77,18 @@
         playerId = player.Id;
 
         return (Guid) player.Id;
+
+    }
+
+
+
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        pressedKey = e.Key;
+        if(player != null){
+            GameServer.IssuePlayerCommand(player,pressedKey);
+        }
 
     }
 

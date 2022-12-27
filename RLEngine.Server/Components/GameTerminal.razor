@@ -1,0 +1,24 @@
+@using RLEngine.Server
+@using RLEngine.Core
+@inject RLEngine.Server.GameServer GameServer
+
+<div class="terminalCell" style="width:@TerminalWidth; min-height:@TerminalWidth">
+<pre  class="ascii">@PlayerBoardView</pre>
+</div>
+
+@code {
+
+    private string terminalwidth = "";
+
+    [Parameter]
+    public string PlayerBoardView {get;set;}= "";
+
+    [Parameter]
+    public string TerminalWidth {get;set;} = $"{GameServer.DrawDistance * 3 + GameServer.DrawDistance/2 -1 }em";
+
+    [Parameter]
+    public IGameObject? Player {get;set;} = null;
+
+
+
+}
