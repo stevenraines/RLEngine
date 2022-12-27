@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations.Schema;
 using RLEngine.Core.Enumerations;
+
 
 namespace RLEngine.Core
 {
@@ -9,11 +11,15 @@ namespace RLEngine.Core
     public class GameBoard : IGameBoard
     {
 
+        public Guid Id { get; set; } = Guid.NewGuid();
         public int Seed { get; set; } = 0;
-        public int GameTick { get; } = 0;
-        public IGameLoop GameLoop { get; }
-        public IList<IGameObject> GameObjects { get; } = new List<IGameObject>();
+        public long GameTick { get { return GameLoop?.GameTick ?? 0; } }
+        public IGameLoop GameLoop { get; set; }
+        public IList<IGameObject> GameObjects { get; set; } = new List<IGameObject>();
 
+        public GameBoard()
+        {
+        }
         public GameBoard(IGameLoop gameLoop)
         {
             GameLoop = gameLoop;
@@ -27,11 +33,13 @@ namespace RLEngine.Core
             if (gameObject.GameBoard.GameObjects.Where(g => g.Id == gameObject.Id).Any())
                 throw new System.Exception("Game Object already exists on this gameboard.");
 
-            // is there anything at the position?
-
-
             GameObjects.Add(gameObject);
             return true;
+        }
+
+        public IGameObject GetGameObject(Guid Id)
+        {
+            return GameObjects.Where(x => x.Id == Id).FirstOrDefault();
         }
 
         public bool AddGameObject(IGameObject gameObject, int x, int y, int z)

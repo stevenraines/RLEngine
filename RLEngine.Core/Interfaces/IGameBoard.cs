@@ -7,10 +7,13 @@ namespace RLEngine.Core
     public interface IGameBoard
     {
 
-        int Seed { get; }
+        Guid Id { get; set; }
+        int Seed { get; set; }
 
-        IGameLoop GameLoop { get; }
-        IList<IGameObject> GameObjects { get; }
+        IGameLoop GameLoop { get; set; }
+        IList<IGameObject> GameObjects { get; set; }
+
+        IGameObject GetGameObject(Guid Id);
         bool AddGameObject(IGameObject gameObject);
         bool AddGameObject(IGameObject gameObject, int x, int y, int z);
         bool AddGameObject(GameObjectType type, int x, int y, int z);

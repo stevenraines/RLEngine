@@ -11,7 +11,8 @@ namespace RLEngine.Core
         GameLoopType Type { get; }
         long GameTick { get; set; }
         IList<IScheduledAction> ScheduledActions { get; }
-
+        Guid GameBoardId { get; set; }
+        IGameBoard GameBoard { get; set; }
         void ScheduleAction(IScheduledAction scheduledAction);
         Task<long> ExecuteActions();
     }

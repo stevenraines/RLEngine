@@ -10,8 +10,10 @@ namespace RLEngine.Core
 
     public class GameLoop : IGameLoop
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
         public GameLoopType Type { get; }
-
+        public Guid GameBoardId { get; set; }
+        public IGameBoard GameBoard { get; set; }
         public int LoopFrequencyMS { get; set; } = 5000;
         public bool GameLoopRunning { get; set; } = false;
 
@@ -22,6 +24,7 @@ namespace RLEngine.Core
         public IList<IScheduledAction> ScheduledActions { get; } = new List<IScheduledAction>();
 
 
+        public GameLoop() { }
 
         public GameLoop(GameLoopType type)
         {
@@ -32,7 +35,8 @@ namespace RLEngine.Core
         public void ScheduleAction(IScheduledAction scheduledAction)
         {
             scheduledAction.ExecuteAt = GameTick += 1;
-            ScheduledActions.Add(scheduledAction);
+            if (!ScheduledActions.Any(a => a.OwnerId == scheduledAction.OwnerId))
+                ScheduledActions.Add(scheduledAction);
         }
 
         public async Task<long> ExecuteActions()

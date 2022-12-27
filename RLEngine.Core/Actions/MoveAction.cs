@@ -1,7 +1,7 @@
 using System;
 using RLEngine;
 
-namespace RLEngine.Core.Core.Core
+namespace RLEngine.Core
 {
 
     public class MoveAction : IAction

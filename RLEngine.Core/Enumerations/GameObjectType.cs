@@ -7,10 +7,10 @@ namespace RLEngine.Core.Enumerations
 
     {
         [Navigable(true)]
-        None = -1,
+        None = (int)' ',
 
         [Navigable(true)]
-        Floor = 249,
+        Floor = (int)'·', //225,
 
         [Navigable(false)]
         Player = (int)'@', //64
@@ -19,7 +19,7 @@ namespace RLEngine.Core.Enumerations
         Monster = (int)'M', //??
 
         [Navigable(false)]
-        Wall = 178,
+        Wall = (int)'#',
 
         [Navigable(true)]
         OpenDoor = 47,

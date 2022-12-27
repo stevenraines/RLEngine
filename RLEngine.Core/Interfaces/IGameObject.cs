@@ -14,6 +14,8 @@ namespace RLEngine.Core
         int Z { get; set; }
         int Layer { get; set; }
         GameObjectType Type { get; }
+
+        Guid GameBoardId { get; set; }
         IGameBoard GameBoard { get; }
         IList<IGameComponent> Components { get; }
 
