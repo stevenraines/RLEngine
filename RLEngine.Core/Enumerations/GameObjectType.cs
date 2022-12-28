@@ -10,6 +10,9 @@ namespace RLEngine.Core.Enumerations
         None = (int)' ',
 
         [Navigable(true)]
+        Item = (int)'/',
+
+        [Navigable(true)]
         Floor = (int)'·', //225,
 
         [Navigable(false)]

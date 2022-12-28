@@ -18,10 +18,9 @@ namespace RLEngine.Core
         public int Z { get; set; }
         public int Layer { get; set; }
         public GameObjectType Type { get; set; }
-
         public Guid GameBoardId { get; set; }
         public IGameBoard GameBoard { get; set; }
-        public IList<IGameComponent> Components { get; set; }
+        public IList<IGameComponent> Components { get; set; } = new List<IGameComponent>();
 
         public bool Navigable
         {
@@ -37,7 +36,6 @@ namespace RLEngine.Core
         public GameObject(IGameBoard gameBoard, GameObjectType type)
         {
             GameBoard = gameBoard;
-            Components = null;//new List<GameComponent>();
             Type = type;
         }
         public GameObject(IGameBoard gameBoard, GameObjectType type, int x, int y, int z, int layer) : this(gameBoard, type)
