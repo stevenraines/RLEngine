@@ -25,7 +25,7 @@ namespace RLEngine.Core
             GameLoop = gameLoop;
         }
 
-        public bool AddGameObject(IGameObject gameObject)
+        public IGameObject AddGameObject(IGameObject gameObject)
         {
             if (gameObject.GameBoard != this)
                 throw new System.Exception("Game Object does not belong to this gameboard.");
@@ -34,7 +34,7 @@ namespace RLEngine.Core
                 throw new System.Exception("Game Object already exists on this gameboard.");
 
             GameObjects.Add(gameObject);
-            return true;
+            return gameObject;
         }
 
         public IGameObject GetGameObject(Guid Id)
@@ -42,32 +42,33 @@ namespace RLEngine.Core
             return GameObjects.Where(x => x.Id == Id).FirstOrDefault();
         }
 
-        public bool AddGameObject(IGameObject gameObject, int x, int y, int z)
+        public IGameObject AddGameObject(IGameObject gameObject, int x, int y, int z)
         {
 
-            if (!AddGameObject(gameObject))
-                return false;
+            if (AddGameObject(gameObject) == null)
+                return null;
 
             SetGameObjectPosition(gameObject, x, y, z);
-            return true;
+            return gameObject;
         }
 
-        public bool AddGameObject(GameObjectType type, int x, int y, int z)
+        public IGameObject AddGameObject(GameObjectType type, int x, int y, int z)
         {
             return AddGameObject(new GameObject(this, type), x, y, z);
         }
 
-        public bool AddGameObjects(int offsetX, int offsetY, IList<(int x, int y, int z, GameObjectType gameObjectType)> gameObjectPositions)
+        public IList<IGameObject> AddGameObjects(int offsetX, int offsetY, IList<(int x, int y, int z, GameObjectType gameObjectType)> gameObjectPositions)
         {
 
-            bool success = true;
+            var gameObjects = new List<IGameObject>();
 
             foreach (var position in gameObjectPositions)
             {
-                success = success && AddGameObject(new GameObject(this, position.gameObjectType, offsetX + position.x, offsetY + position.y, position.z, 0));
+                var gameObject = AddGameObject(new GameObject(this, position.gameObjectType, offsetX + position.x, offsetY + position.y, position.z, 0));
+                if (gameObject != null) gameObjects.Add(gameObject);
             }
 
-            return success;
+            return gameObjects;
         }
 
         public IGameBoardPosition GetGameBoardPosition(int x, int y, int z)
@@ -85,6 +86,7 @@ namespace RLEngine.Core
             gameObject.Y = y;
             gameObject.Z = z;
             return true;
+
 
         }
 

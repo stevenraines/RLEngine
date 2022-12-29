@@ -20,8 +20,9 @@ namespace RLEngine.Core
         IList<IGameComponent> Components { get; }
 
         bool Navigable { get; }
-
+        IList<(Direction direction, IGameObject gameObject)> Neighbors { get; }
         bool Move(int x, int y, int z);
+        IList<IGameMessage> Messages { get; set; }
 
     }
 

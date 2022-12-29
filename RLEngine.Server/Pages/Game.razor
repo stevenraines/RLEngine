@@ -11,8 +11,10 @@
 <div class="terminalContainer" @ref="keyRef" tabindex="0" @onkeydown="HandleKeyDown">
     <div class="terminalCell" style="grid-column: span 3;">Header</div>
     <div class="terminalCell">Area A</div>
-    <GameTerminal Player="@player" PlayerBoardView="@playerBoardView"></GameTerminal>
-    <div style="grid-row: span 2;" class="terminalCell">Info Panel</div>
+    <GameTerminal Player="@player" GameBoardObjects="@GameBoardObjects"></GameTerminal>
+
+    <HistoryTerminal OnCommandChange="CommandChangeHandler" Player="@player" CommandText="@CommandText"></HistoryTerminal>
+
     <div class="terminalCell">Area B</div>
     <StatusTerminal Player="@player" LastAction="@pressedKey"></StatusTerminal>
     <div style="grid-column: span 3;"></div>
@@ -20,15 +22,16 @@
 
 @code {
 
-    private System.Threading.Timer? timer = null;
+    private System.Threading.Timer timer = null;
     private long lastTick;
-    private string playerBoardView = "";
+    private string CommandText {get;set;}= "TEST";
+    private IList<IGameObject> GameBoardObjects = new List<IGameObject>();
     private ElementReference keyRef;
     private string pressedKey = "";
 
 
     Guid? playerId = null;
-    private IGameObject? player;
+    private IGameObject player;
 
     protected override void OnInitialized()
     {
@@ -39,7 +42,8 @@
             if(GameServer.GameTick <= lastTick) return;
 
             if(player != null){
-                playerBoardView =  GameServer.RenderStringView(player.X,player.Y,player.Z);
+
+                GameBoardObjects = GameServer.GetGameBoardObjectsToRender(player.X,player.Y,player.Z);
 
                 // we need StateHasChanged() because this is an async void handler
                 // we need to Invoke it because we could be on the wrong Thread
@@ -56,7 +60,7 @@
 
             await SetPlayer();
         }
-        await keyRef.FocusAsync();
+       // await keyRef.FocusAsync();
         lastTick = GameServer.GameTick;
 
     }
@@ -80,14 +84,29 @@
 
     }
 
+    private void CommandChangeHandler(string command)
+    {
+        CommandText = command;
+        ParseTextCommand(command);
+        CommandText = "";
+    }
 
+    private void ParseTextCommand(string command){
+
+        if(player != null)
+            player.Messages.Add(new GameMessage(GameServer.GameTick,$"Issued command ({command})"));
+
+    }
 
 
     private void HandleKeyDown(KeyboardEventArgs e)
     {
         pressedKey = e.Key;
         if(player != null){
-            GameServer.IssuePlayerCommand(player,pressedKey);
+            if(GameServer.IssuePlayerCommand(player,pressedKey)){
+                CommandText = "";
+            }
+
         }
 
     }

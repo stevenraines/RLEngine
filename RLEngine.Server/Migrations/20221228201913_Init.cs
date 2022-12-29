@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RLEngine.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,7 @@ namespace RLEngine.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     X = table.Column<int>(type: "INTEGER", nullable: false),
                     Y = table.Column<int>(type: "INTEGER", nullable: false),
                     Z = table.Column<int>(type: "INTEGER", nullable: false),
@@ -73,13 +74,34 @@ namespace RLEngine.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    GameObjectId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    GameObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Meta = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameComponent", x => x.Id);
                     table.ForeignKey(
                         name: "FK_GameComponent_GameObject_GameObjectId",
+                        column: x => x.GameObjectId,
+                        principalTable: "GameObject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameMessage",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    GameObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Message = table.Column<string>(type: "TEXT", nullable: true),
+                    GameTick = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameMessage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameMessage_GameObject_GameObjectId",
                         column: x => x.GameObjectId,
                         principalTable: "GameObject",
                         principalColumn: "Id",
@@ -98,6 +120,11 @@ namespace RLEngine.Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameMessage_GameObjectId",
+                table: "GameMessage",
+                column: "GameObjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameObject_GameBoardId",
                 table: "GameObject",
                 column: "GameBoardId");
@@ -111,6 +138,9 @@ namespace RLEngine.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "GameLoop");
+
+            migrationBuilder.DropTable(
+                name: "GameMessage");
 
             migrationBuilder.DropTable(
                 name: "GameObject");

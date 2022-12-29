@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace RLEngine.Core
 {
 
@@ -10,8 +12,20 @@ namespace RLEngine.Core
 
         public IGameObject GameObject { get; set; }
 
-        public GameComponent() { }
+        public IDictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
+
+        public GameComponent() { }
+        public string Serialized
+        {
+            get { return JsonSerializer.Serialize(Data); }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                var metaData = JsonSerializer.Deserialize<Dictionary<string, object>>(value);
+                Data = metaData ?? new Dictionary<string, object>();
+            }
+        }
     }
 
 }

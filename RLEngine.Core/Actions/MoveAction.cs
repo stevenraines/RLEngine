@@ -1,6 +1,7 @@
 using System;
-using RLEngine;
-
+using RLEngine.Core.Enumerations;
+using RLEngine.Core.Extensions;
+using RLEngine.Core.Attributes;
 namespace RLEngine.Core
 {
 
@@ -19,9 +20,28 @@ namespace RLEngine.Core
             Z = z;
         }
 
+        public MoveAction(IGameObject owner, Direction direction)
+        {
+            Owner = owner;
+
+            X = direction.GetAttribute<DirectionAttribute>().X;
+            Y = direction.GetAttribute<DirectionAttribute>().Y;
+            Z = direction.GetAttribute<DirectionAttribute>().Z;
+        }
+
         public bool Execute()
         {
-            return Owner.Move(X, Y, Z);
+            var success = Owner.Move(X, Y, Z);
+
+            var neighborList = Owner.Neighbors.Where(n =>
+                                                        n.gameObject.Id != Owner.Id
+                                                        && n.gameObject.Type != GameObjectType.None
+                                                        && n.gameObject.Type != GameObjectType.Floor).Select(n => $"{Enum.GetName(n.gameObject.Type)} to the {Enum.GetName(n.direction)}").ToList();
+
+            Owner.Messages.Add(new GameMessage(Owner.GameBoard.GameLoop.GameTick, string.Join("\n", neighborList)));
+
+            return success;
+
         }
 
     }

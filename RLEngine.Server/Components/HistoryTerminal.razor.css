@@ -1,0 +1,38 @@
+div.terminalCell {
+    padding: 1px;
+    display: flex;
+    border: 1px solid #fff;
+    grid-row: span 2;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+div.ascii {
+
+    display: flex;
+    flex-grow: 1;
+    flex: 1;
+    align-items: stretch;
+}
+
+div.ascii pre {
+    margin: .5em;
+    align-self: flex-end;
+    caret-color: transparent;
+    font-family: monospace;
+    flex-grow: 1;
+    flex: 1;
+}
+
+input.playerInput {
+    height: 2em;
+    background-color: transparent;
+    color: whitesmoke;
+    font-family: monospace;
+    caret-color: whitesmoke;
+    outline: solid whitesmoke;
+    width: 100%;
+    border: none;
+    border-top: 1px solid #fff;
+    align-self: flex-end;
+}

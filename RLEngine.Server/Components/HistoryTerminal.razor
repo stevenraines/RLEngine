@@ -1,0 +1,70 @@
+@using RLEngine.Server
+@using RLEngine.Core
+@using System.Collections.Generic;
+@using System.Linq;
+
+@inject RLEngine.Server.GameServer GameServer
+
+<div class="terminalCell" >
+    <div class="ascii"><pre>@Messages</pre></div>
+    <div><input @ref="inputRef" class="playerInput" @bind="CommandText"  type="text"/></div>
+</div>
+
+@code {
+
+    [Parameter] public EventCallback<string> OnCommandChange { get; set; }
+
+
+    private ElementReference inputRef;
+
+    [Parameter]
+    public IGameObject Player {get;set;} = null ;
+
+
+    private string _CommandText;
+
+    [Parameter]
+    public string CommandText {
+        get { return  _CommandText;}
+        set
+        {
+            if(_CommandText == value)
+                return;
+
+            _CommandText = value.Trim();
+            if(!String.IsNullOrWhiteSpace(_CommandText))
+            OnCommandChange.InvokeAsync(_CommandText);
+
+        }
+    }
+
+    private string localCommandText {get; set;}
+
+    public string Messages {get; private set;} = "";
+
+
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(Player != null)
+            Messages = String.Join("\n",Player.Messages.Where(x => !String.IsNullOrWhiteSpace(x.Message))
+                                                        .OrderByDescending(x => x.GameTick)
+                                                        .Take(10)
+                                                        .OrderBy(x => x.GameTick)
+                                                        .Select(x => x.Message)
+                                                        .ToList());
+
+        await inputRef.FocusAsync();
+
+
+   }
+
+
+
+
+}

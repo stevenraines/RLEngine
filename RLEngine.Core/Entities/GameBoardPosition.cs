@@ -15,6 +15,8 @@ namespace RLEngine.Core
 
         public IList<IGameObject> GameObjects { get; set; } = new List<IGameObject>();
 
+        public IList<(Direction direction, IGameObject gameObject)> Neightbors { get; set; } = new List<(Direction direction, IGameObject gameObject)>();
+
 
         public GameBoardPosition(int x, int y, int z, IList<IGameObject> gameObjects)
         {

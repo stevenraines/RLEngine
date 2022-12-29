@@ -5,7 +5,9 @@ namespace RLEngine.Core
     {
 
         Guid GameObjectId { get; set; }
-        public IGameObject GameObject { get; set; }
+        IGameObject GameObject { get; set; }
+        IDictionary<string, object> Data { get; set; }
+
 
     }
 

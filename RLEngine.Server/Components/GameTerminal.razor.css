@@ -1,8 +1,7 @@
-pre.ascii {
+.ascii {
 
     padding: 0em;
-    margin: 1em;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1em;
     letter-spacing: .5em;
     caret-color: transparent;
@@ -14,7 +13,26 @@ pre.ascii {
 div.terminalCell {
     padding: 5px;
     grid-row: span 2;
+    display: flex;
     border: 1px solid #fff;
+    overflow: hidden;
+    text-align: center;
+}
+
+div.GameboardView {
+    min-width: 40vw;
+    min-height: 60vh;
+    overflow: hidden;
+    text-align: center;
+    display: grid;
+}
+
+div.GameboardViewColumn {
+    overflow: hidden;
+    text-align: center;
+}
+
+div.GameboardViewRow {
     overflow: hidden;
     text-align: center;
 }

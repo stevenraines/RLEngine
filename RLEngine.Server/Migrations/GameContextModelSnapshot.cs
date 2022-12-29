@@ -38,6 +38,10 @@ namespace RLEngine.Server.Migrations
                     b.Property<Guid>("GameObjectId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Serialized")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Meta");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameObjectId");
@@ -73,6 +77,27 @@ namespace RLEngine.Server.Migrations
                     b.ToTable("GameLoop");
                 });
 
+            modelBuilder.Entity("RLEngine.Core.GameMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("GameObjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("GameTick")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameObjectId");
+
+                    b.ToTable("GameMessage");
+                });
+
             modelBuilder.Entity("RLEngine.Core.GameObject", b =>
                 {
                     b.Property<Guid>("Id")
@@ -83,6 +108,9 @@ namespace RLEngine.Server.Migrations
 
                     b.Property<int>("Layer")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
@@ -125,6 +153,17 @@ namespace RLEngine.Server.Migrations
                     b.Navigation("GameBoard");
                 });
 
+            modelBuilder.Entity("RLEngine.Core.GameMessage", b =>
+                {
+                    b.HasOne("RLEngine.Core.GameObject", "GameObject")
+                        .WithMany("Messages")
+                        .HasForeignKey("GameObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GameObject");
+                });
+
             modelBuilder.Entity("RLEngine.Core.GameObject", b =>
                 {
                     b.HasOne("RLEngine.Core.GameBoard", "GameBoard")
@@ -138,8 +177,7 @@ namespace RLEngine.Server.Migrations
 
             modelBuilder.Entity("RLEngine.Core.GameBoard", b =>
                 {
-                    b.Navigation("GameLoop")
-                        .IsRequired();
+                    b.Navigation("GameLoop");
 
                     b.Navigation("GameObjects");
                 });
@@ -147,6 +185,8 @@ namespace RLEngine.Server.Migrations
             modelBuilder.Entity("RLEngine.Core.GameObject", b =>
                 {
                     b.Navigation("Components");
+
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,24 +1,36 @@
 @using RLEngine.Server
 @using RLEngine.Core
+@using RLEngine.Core.Enumerations;
 @inject RLEngine.Server.GameServer GameServer
 
-<div class="terminalCell" style="width:@TerminalWidth; min-height:@TerminalWidth">
-<pre  class="ascii">@PlayerBoardView</pre>
+<div class="terminalCell">
+    <div class="GameboardView" style="@GridColumnString">
+    @foreach (var gameBoardObject in GameBoardObjects)
+    {
+        var positionType = gameBoardObject?.Type ?? GameObjectType.None;
+        MarkupString str = (MarkupString) ((char)(int)positionType).ToString();
+        if(positionType == GameObjectType.None) str = (MarkupString) "&nbsp;";
+        MarkupString cssClass = (MarkupString) $"GameBoardCell ascii {Enum.GetName(positionType)}".ToString();
+        <div data-position-x="@gameBoardObject.X"
+             data-position-y="@gameBoardObject.Y"
+             class="@cssClass">@str</div>
+    }
+    </div>
 </div>
 
 @code {
 
-    private string terminalwidth = "";
 
     [Parameter]
-    public string PlayerBoardView {get;set;}= "";
+    public IList<IGameObject> GameBoardObjects {get;set;} = new List<IGameObject>();
 
     [Parameter]
     public string TerminalWidth {get;set;} = $"{GameServer.DrawDistance * 3 + GameServer.DrawDistance/2 -1 }em";
 
+
     [Parameter]
     public IGameObject? Player {get;set;} = null;
 
-
+    private string GridColumnString = $"grid-template-columns:{ string.Concat(Enumerable.Repeat("auto ", GameServer.DrawDistance * 2 + 1))}";
 
 }

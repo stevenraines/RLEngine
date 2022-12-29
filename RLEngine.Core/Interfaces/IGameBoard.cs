@@ -14,10 +14,10 @@ namespace RLEngine.Core
         IList<IGameObject> GameObjects { get; set; }
 
         IGameObject GetGameObject(Guid Id);
-        bool AddGameObject(IGameObject gameObject);
-        bool AddGameObject(IGameObject gameObject, int x, int y, int z);
-        bool AddGameObject(GameObjectType type, int x, int y, int z);
-        bool AddGameObjects(int x, int y, IList<(int x, int y, int z, GameObjectType gameObjectType)> gameObjectPositions);
+        IGameObject AddGameObject(IGameObject gameObject);
+        IGameObject AddGameObject(IGameObject gameObject, int x, int y, int z);
+        IGameObject AddGameObject(GameObjectType type, int x, int y, int z);
+        IList<IGameObject> AddGameObjects(int x, int y, IList<(int x, int y, int z, GameObjectType gameObjectType)> gameObjectPositions);
 
 
         bool SetGameObjectPosition(IGameObject gameObject, int x, int y, int z);
