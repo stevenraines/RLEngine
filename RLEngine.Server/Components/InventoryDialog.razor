@@ -1,5 +1,6 @@
 @using RLEngine.Server
 @using RLEngine.Core
+@using RLEngine.Core.Components;
 @inject RLEngine.Server.GameServer GameServer
 
 @if(Open){
@@ -9,7 +10,8 @@
             <table>
             @for(var itemIndex = 1; itemIndex <= Items.Count(); itemIndex++){
                 var item = Items[itemIndex-1];
-                <tr><td>@itemIndex</td><td>@item.Name</td></tr>
+                var itemComponent = item.GetComponent<ItemComponent>();
+                <tr><td>@itemIndex</td><td>@item.Name</td><td>@itemComponent.Value</td></tr>
             }
             </table>
             <pre>@GameServer.GameTick</pre>

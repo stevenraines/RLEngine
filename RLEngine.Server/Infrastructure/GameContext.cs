@@ -23,7 +23,6 @@ namespace RLEngine.Server.Infrastructure
             modelBuilder.Entity<GameBoard>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.Entity<GameLoop>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.Entity<GameObject>().Property(x => x.Id).ValueGeneratedNever();
-            modelBuilder.Entity<GameComponent>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.Entity<GameMessage>().Property(x => x.Id).ValueGeneratedNever();
 
             modelBuilder.Entity<GameBoard>()
@@ -42,15 +41,11 @@ namespace RLEngine.Server.Infrastructure
                 .WithOne(h => (GameObject)h.GameObject)
                     .HasForeignKey(p => p.GameObjectId);
 
-            modelBuilder.Entity<GameObject>()
-                       .HasMany(h => (IList<GameComponent>)h.Components)
-                       .WithOne(h => (GameObject)h.GameObject)
-                           .HasForeignKey(p => p.GameObjectId);
+            modelBuilder.Entity<GameObject>().Ignore(p => p.Components);
 
-            modelBuilder.Entity<GameComponent>().Ignore(p => p.Data);
-            modelBuilder.Entity<GameComponent>()
-                         .Property(p => p.Serialized)
-                         .HasColumnName("Meta");
+            modelBuilder.Entity<GameObject>()
+                         .Property(p => p.SerializedComponents)
+                         .HasColumnName("Components");
 
 
             base.OnModelCreating(modelBuilder);

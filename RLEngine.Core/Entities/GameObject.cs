@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 using RLEngine.Core.Enumerations;
 using RLEngine.Core.Attributes;
 using RLEngine.Core.Extensions;
@@ -25,7 +26,10 @@ namespace RLEngine.Core
         public IGameBoard GameBoard { get; set; }
         public IList<IGameMessage> Messages { get; set; } = new List<IGameMessage>();
 
-        public IList<IGameComponent> Components { get; set; } = new List<IGameComponent>();
+        //public IList<IGameComponent> Components { get; set; } = new List<IGameComponent>();
+
+        [NotMapped]
+        public IDictionary<string, dynamic> Components { get; set; } = new Dictionary<string, dynamic>();
 
         public IList<(Direction direction, IGameObject gameObject)> Neighbors { get { return GetNeighbors(); } }
 
@@ -101,10 +105,40 @@ namespace RLEngine.Core
 
         public T GetComponent<T>()
         {
-            return Components.OfType<T>().FirstOrDefault();
+
+            var trueKeyName = Components.Keys.Where(x => x == typeof(T).AssemblyQualifiedName).FirstOrDefault();
+            if (trueKeyName == null) return default(T);
+            return Components.Where(x => x.Key == trueKeyName).Select(x => x.Value).FirstOrDefault();
+
         }
 
+        public string SerializedComponents
+        {
+            get { return JsonSerializer.Serialize(Components); }
+            set
+            {
 
+                var componentList = new Dictionary<string, dynamic>();
+
+                if (string.IsNullOrEmpty(value)) return;
+                var components = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(value);
+
+                foreach (var component in components)
+                {
+
+                    var componentTypeName = component.Key.ToString();
+                    Type T = System.Type.GetType(componentTypeName);
+                    var obj = (JsonElement)component.Value;
+                    var cmp = JsonSerializer.Deserialize(obj.GetRawText(), T);
+                    componentList.Add(componentTypeName, cmp);
+
+
+
+                }
+
+                Components = componentList;
+            }
+        }
 
     }
 

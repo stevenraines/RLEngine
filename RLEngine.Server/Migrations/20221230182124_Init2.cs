@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RLEngine.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Init2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,8 @@ namespace RLEngine.Server.Migrations
                     Z = table.Column<int>(type: "INTEGER", nullable: false),
                     Layer = table.Column<int>(type: "INTEGER", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    GameBoardId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    GameBoardId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Components = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -65,26 +66,6 @@ namespace RLEngine.Server.Migrations
                         name: "FK_GameObject_GameBoards_GameBoardId",
                         column: x => x.GameBoardId,
                         principalTable: "GameBoards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GameComponent",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ComponentTypeName = table.Column<string>(type: "TEXT", nullable: true),
-                    GameObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Meta = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameComponent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GameComponent_GameObject_GameObjectId",
-                        column: x => x.GameObjectId,
-                        principalTable: "GameObject",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -110,11 +91,6 @@ namespace RLEngine.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameComponent_GameObjectId",
-                table: "GameComponent",
-                column: "GameObjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_GameLoop_GameBoardId",
                 table: "GameLoop",
                 column: "GameBoardId",
@@ -134,9 +110,6 @@ namespace RLEngine.Server.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "GameComponent");
-
             migrationBuilder.DropTable(
                 name: "GameLoop");
 

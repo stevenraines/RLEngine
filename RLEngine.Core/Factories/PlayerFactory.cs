@@ -10,7 +10,7 @@ namespace RLEngine.Core.Factories
         public static IGameObject CreatePlayer(IGameBoard gameBoard)
         {
             var player = new GameObject(gameBoard, GameObjectType.Player, "Player1", 0, 0, 0, 10);
-            player.Components.Add(new GameComponent());
+            player.Components.Add(typeof(InventoryComponent).AssemblyQualifiedName, new InventoryComponent());
 
             return player;
         }

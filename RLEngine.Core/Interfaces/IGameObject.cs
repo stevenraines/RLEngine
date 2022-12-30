@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using RLEngine.Core.Enumerations;
 
 
@@ -17,13 +18,18 @@ namespace RLEngine.Core
         GameObjectType Type { get; }
         Guid GameBoardId { get; set; }
         IGameBoard GameBoard { get; }
-        IList<IGameComponent> Components { get; set; }
+
+        [NotMapped]
+        IDictionary<string, dynamic> Components { get; set; }
+
+        //  IList<IGameComponent> Components { get; set; }
         IList<IGameMessage> Messages { get; set; }
         bool Navigable { get; }
         IList<(Direction direction, IGameObject gameObject)> Neighbors { get; }
         bool Move(int x, int y, int z);
         void AddMessage(string message);
         T GetComponent<T>();
+        public string SerializedComponents { get; set; }
     }
 
 }

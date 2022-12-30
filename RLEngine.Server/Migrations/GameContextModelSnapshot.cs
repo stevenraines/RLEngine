@@ -30,28 +30,6 @@ namespace RLEngine.Server.Migrations
                     b.ToTable("GameBoards");
                 });
 
-            modelBuilder.Entity("RLEngine.Core.GameComponent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ComponentTypeName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("GameObjectId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Serialized")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Meta");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameObjectId");
-
-                    b.ToTable("GameComponent");
-                });
-
             modelBuilder.Entity("RLEngine.Core.GameLoop", b =>
                 {
                     b.Property<Guid>("Id")
@@ -115,6 +93,10 @@ namespace RLEngine.Server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SerializedComponents")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Components");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
@@ -132,17 +114,6 @@ namespace RLEngine.Server.Migrations
                     b.HasIndex("GameBoardId");
 
                     b.ToTable("GameObject");
-                });
-
-            modelBuilder.Entity("RLEngine.Core.GameComponent", b =>
-                {
-                    b.HasOne("RLEngine.Core.GameObject", "GameObject")
-                        .WithMany("Components")
-                        .HasForeignKey("GameObjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GameObject");
                 });
 
             modelBuilder.Entity("RLEngine.Core.GameLoop", b =>
@@ -187,8 +158,6 @@ namespace RLEngine.Server.Migrations
 
             modelBuilder.Entity("RLEngine.Core.GameObject", b =>
                 {
-                    b.Navigation("Components");
-
                     b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618

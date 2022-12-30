@@ -60,10 +60,12 @@ namespace RLEngine.Server
 
             GameBoard = await GameContext.GameBoards
                                  .Include(x => x.GameObjects)
-                                    .ThenInclude(x => x.Components)
+                                  //   .ThenInclude(x => x.Components)
                                   .Include(x => x.GameObjects)
                                     .ThenInclude(x => x.Messages)
                                  .Include(x => x.GameLoop)
+                                 .AsSplitQuery()
+                                 .OrderBy(x => x.Id)
                                  .FirstOrDefaultAsync();
 
             if (GameBoard == null)

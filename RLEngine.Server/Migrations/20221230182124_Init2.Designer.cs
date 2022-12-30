@@ -11,8 +11,8 @@ using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20221230172136_Init")]
-    partial class Init
+    [Migration("20221230182124_Init2")]
+    partial class Init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,28 +31,6 @@ namespace RLEngine.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GameBoards");
-                });
-
-            modelBuilder.Entity("RLEngine.Core.GameComponent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ComponentTypeName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("GameObjectId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Serialized")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Meta");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameObjectId");
-
-                    b.ToTable("GameComponent");
                 });
 
             modelBuilder.Entity("RLEngine.Core.GameLoop", b =>
@@ -118,6 +96,10 @@ namespace RLEngine.Server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SerializedComponents")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Components");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
@@ -135,17 +117,6 @@ namespace RLEngine.Server.Migrations
                     b.HasIndex("GameBoardId");
 
                     b.ToTable("GameObject");
-                });
-
-            modelBuilder.Entity("RLEngine.Core.GameComponent", b =>
-                {
-                    b.HasOne("RLEngine.Core.GameObject", "GameObject")
-                        .WithMany("Components")
-                        .HasForeignKey("GameObjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GameObject");
                 });
 
             modelBuilder.Entity("RLEngine.Core.GameLoop", b =>
@@ -190,8 +161,6 @@ namespace RLEngine.Server.Migrations
 
             modelBuilder.Entity("RLEngine.Core.GameObject", b =>
                 {
-                    b.Navigation("Components");
-
                     b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618

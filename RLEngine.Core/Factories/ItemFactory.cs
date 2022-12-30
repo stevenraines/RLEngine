@@ -14,8 +14,8 @@ namespace RLEngine.Core.Factories
                                                 int y,
                                                 int z)
         {
-            var item = new GameObject(gameBoard, GameObjectType.Item, x, y, z, 1);
-            item.Components.Add(new ItemComponent(name, properties));
+            var item = new GameObject(gameBoard, GameObjectType.Item, "Gem", x, y, z, 1);
+            item.Components.Add(typeof(ItemComponent).AssemblyQualifiedName, new ItemComponent(100));
             return item;
         }
 

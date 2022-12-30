@@ -3,9 +3,12 @@ namespace RLEngine.Core.Components
     public class ItemComponent : GameComponent
     {
 
-        public ItemComponent(string name, object properties) : base(name, properties)
+        public decimal Value { get; set; }
+
+        public ItemComponent() { }
+        public ItemComponent(decimal value) : base()
         {
-            ComponentTypeName = nameof(ItemComponent);
+            Value = value;
         }
 
     }
