@@ -1,10 +1,11 @@
+@inherits InventoryDialogBase
 @using RLEngine.Server
 @using RLEngine.Core
 @using RLEngine.Core.Components;
 @inject RLEngine.Server.GameServer GameServer
 
 @if(Open){
-    <div class="overlay">
+    <div  class="overlay">
         <div class="dialog ascii">
             <div>Inventory!</div>
             <table>
@@ -17,19 +18,4 @@
             <pre>@GameServer.GameTick</pre>
         </div>
     </div>
-}
-
-
-@code {
-
-    [Parameter]
-    public bool Open {get;set;} = false ;
-
-    [Parameter]
-    public IGameObject Player {get;set;} = null ;
-
-    [Parameter]
-    public IList<IGameObject> Items {get;set;} = null ;
-
-
 }

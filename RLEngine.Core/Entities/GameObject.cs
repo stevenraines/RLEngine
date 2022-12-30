@@ -26,13 +26,12 @@ namespace RLEngine.Core
         public IGameBoard GameBoard { get; set; }
         public IList<IGameMessage> Messages { get; set; } = new List<IGameMessage>();
 
-        //public IList<IGameComponent> Components { get; set; } = new List<IGameComponent>();
-
         [NotMapped]
         public IDictionary<string, dynamic> Components { get; set; } = new Dictionary<string, dynamic>();
 
         public IList<(Direction direction, IGameObject gameObject)> Neighbors { get { return GetNeighbors(); } }
 
+        public Guid ContainerGameObjectId { get; set; } = Guid.Empty;
 
         public bool Navigable
         {
@@ -103,6 +102,20 @@ namespace RLEngine.Core
             Messages.Add(new GameMessage(GameBoard.GameLoop.GameTick, message));
         }
 
+        public T AddComponent<T>(T component)
+        {
+
+            if (HasComponent<T>()) throw new Exception("Component already exists");
+
+            if ((component) is GameComponent)
+            {
+                ((IGameComponent)component).GameObject = this;
+            }
+
+            Components.Add(typeof(T).AssemblyQualifiedName, component);
+            return component;
+
+        }
         public T GetComponent<T>()
         {
 
@@ -111,6 +124,13 @@ namespace RLEngine.Core
             return Components.Where(x => x.Key == trueKeyName).Select(x => x.Value).FirstOrDefault();
 
         }
+        public bool HasComponent<T>()
+        {
+
+            return Components.Keys.Any(x => x == typeof(T).AssemblyQualifiedName);
+
+        }
+
 
         public string SerializedComponents
         {
@@ -130,6 +150,8 @@ namespace RLEngine.Core
                     Type T = System.Type.GetType(componentTypeName);
                     var obj = (JsonElement)component.Value;
                     var cmp = JsonSerializer.Deserialize(obj.GetRawText(), T);
+                    if (cmp is IGameComponent)
+                        ((IGameComponent)cmp).GameObject = this;
                     componentList.Add(componentTypeName, cmp);
 
 

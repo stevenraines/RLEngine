@@ -19,6 +19,8 @@ namespace RLEngine.Core
         Guid GameBoardId { get; set; }
         IGameBoard GameBoard { get; }
 
+        Guid ContainerGameObjectId { get; set; }
+
         [NotMapped]
         IDictionary<string, dynamic> Components { get; set; }
 
@@ -28,7 +30,10 @@ namespace RLEngine.Core
         IList<(Direction direction, IGameObject gameObject)> Neighbors { get; }
         bool Move(int x, int y, int z);
         void AddMessage(string message);
+
+        T AddComponent<T>(T component);
         T GetComponent<T>();
+        public bool HasComponent<T>();
         public string SerializedComponents { get; set; }
     }
 

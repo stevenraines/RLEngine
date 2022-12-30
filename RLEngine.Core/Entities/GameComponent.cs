@@ -10,16 +10,11 @@ namespace RLEngine.Core
         [JsonInclude]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Name { get; set; }
-
+        [JsonIgnore]
+        public IGameObject GameObject { get; set; }
 
         public GameComponent()
         { }
-
-        public GameComponent(string name)
-        {
-            Name = name;
-        }
 
 
     }

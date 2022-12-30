@@ -4,7 +4,7 @@
 
 <PageTitle>Main Game</PageTitle>
 <div class="gameWindow" tabindex="0" @onkeydown="HandleKeyDown">
-    <InventoryDialog Open="@InventoryDialogOpen" Items="pickupItems" Player="@player"></InventoryDialog>
+    <InventoryDialog @ref="InventoryDialog" Open="@InventoryDialogOpen" Items="inventoryDialogItems" Mode="Mode" Player="@player"></InventoryDialog>
     <div class="terminalContainer" @ref="keyRef" >
 
         <div class="terminalCell" style="grid-column: span 3;">Header</div>

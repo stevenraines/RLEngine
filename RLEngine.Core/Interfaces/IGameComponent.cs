@@ -5,6 +5,7 @@ namespace RLEngine.Core
     {
         public Guid Id { get; set; }
 
+        public IGameObject GameObject { get; set; }
 
     }
 

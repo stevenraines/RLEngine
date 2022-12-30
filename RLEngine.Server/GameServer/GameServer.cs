@@ -17,7 +17,6 @@ namespace RLEngine.Server
         public const int DrawDistance = 12;
         public const int GameSpeed = 250;
 
-
         private readonly GameContext GameContext;
         public System.Timers.Timer GameTimer { get; private set; }
         public IGameBoard GameBoard { get; set; }
@@ -30,7 +29,6 @@ namespace RLEngine.Server
         {
 
             GameContext = new GameContext(dbOptions);
-
 
             Task.Run(InitializeGameBoard).Wait();
         }

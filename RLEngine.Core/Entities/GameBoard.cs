@@ -73,7 +73,12 @@ namespace RLEngine.Core
 
         public IGameBoardPosition GetGameBoardPosition(int x, int y, int z)
         {
-            return new GameBoardPosition(x, y, z, GameObjects.Where(g => g.X == x && g.Y == y && g.Z == z).OrderByDescending(g => g.Layer).ThenBy(g => g.Navigable).ToList());
+            return new GameBoardPosition(x, y, z, GameObjects.Where(g => g.ContainerGameObjectId == Guid.Empty
+                                                                        && g.X == x
+                                                                        && g.Y == y
+                                                                        && g.Z == z)
+                                                                .OrderByDescending(g => g.Layer)
+                                                                    .ThenBy(g => g.Navigable).ToList());
         }
 
         public bool SetGameObjectPosition(IGameObject gameObject, int x, int y, int z)
