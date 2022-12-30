@@ -33,7 +33,6 @@ namespace RLEngine.Core
             return objectsOfType;
         }
 
-
         public bool IsNavigable()
         {
             return GameObjects.All(g => g.Navigable);
