@@ -3,22 +3,10 @@ namespace RLEngine.Core.Components
     public class ItemComponent : GameComponent
     {
 
-        public string Name
+        public ItemComponent(string name, object properties) : base(name, properties)
         {
-            get
-            {
-                return (string)Data["name"];
-            }
+            ComponentTypeName = nameof(ItemComponent);
         }
-
-        public ItemComponent(string name, object properties)
-        {
-
-            Data["name"] = name;
-            Data["properties"] = properties;
-        }
-
-
 
     }
 }

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using RLEngine.Core.Enumerations;
-
 using RLEngine.Core.Attributes;
 using RLEngine.Core.Extensions;
-
+using RLEngine.Core.Components;
 
 namespace RLEngine.Core
 {
@@ -23,6 +24,7 @@ namespace RLEngine.Core
         public Guid GameBoardId { get; set; }
         public IGameBoard GameBoard { get; set; }
         public IList<IGameMessage> Messages { get; set; } = new List<IGameMessage>();
+
         public IList<IGameComponent> Components { get; set; } = new List<IGameComponent>();
 
         public IList<(Direction direction, IGameObject gameObject)> Neighbors { get { return GetNeighbors(); } }
@@ -39,15 +41,21 @@ namespace RLEngine.Core
 
         public GameObject() { }
 
-        public GameObject(IGameBoard gameBoard, GameObjectType type, string name = null)
+        public GameObject(IGameBoard gameBoard, GameObjectType type)
         {
             GameBoard = gameBoard;
             Type = type;
-            Name = name ?? $"GameObject {Enum.GetName(type)} {Id.ToString()}";
+
+        }
+
+        public GameObject(IGameBoard gameBoard, GameObjectType type, string name, int x, int y, int z, int layer) : this(gameBoard, type, x, y, z, layer)
+        {
+            Name = String.IsNullOrEmpty(name) ? $"GameObject {Enum.GetName(type)} {Id.ToString()}" : name;
         }
         public GameObject(IGameBoard gameBoard, GameObjectType type, int x, int y, int z, int layer) : this(gameBoard, type)
         {
             GameBoard.SetGameObjectPosition(this, x, y, z);
+            Layer = layer;
 
         }
 
@@ -85,6 +93,18 @@ namespace RLEngine.Core
 
             return neighborTypes;
         }
+
+        public void AddMessage(string message)
+        {
+            Messages.Add(new GameMessage(GameBoard.GameLoop.GameTick, message));
+        }
+
+        public T GetComponent<T>()
+        {
+            return Components.OfType<T>().FirstOrDefault();
+        }
+
+
 
     }
 

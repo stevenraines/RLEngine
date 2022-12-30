@@ -1,0 +1,26 @@
+div.overlay {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+div.dialog {
+    margin: auto;
+    width: 75%;
+    height: 50%;
+    padding: 10px;
+    color: #fff;
+    border: 3px solid #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+div.ascii pre {
+    margin: .5em;
+    align-self: flex-end;
+    caret-color: transparent;
+    font-family: monospace;
+    flex-grow: 1;
+    flex: 1;
+}

@@ -10,7 +10,7 @@ namespace RLEngine.Core.Components
 
         public InventoryComponent()
         {
-
+            ComponentTypeName = nameof(InventoryComponent);
         }
 
     }

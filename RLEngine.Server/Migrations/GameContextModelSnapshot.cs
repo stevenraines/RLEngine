@@ -35,6 +35,9 @@ namespace RLEngine.Server.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ComponentTypeName")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("GameObjectId")
                         .HasColumnType("TEXT");
 

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using RLEngine.Core;
 using RLEngine.Core.Enumerations;
 using RLEngine.Core.Generators;
-using RLEngine.Server.Infrastructure;
+using RLEngine.Core.Components;
 using RLEngine.Core.Factories;
-
+using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server
 {
     public class GameServer
@@ -20,7 +20,7 @@ namespace RLEngine.Server
 
         private readonly GameContext GameContext;
         public System.Timers.Timer GameTimer { get; private set; }
-        private IGameBoard GameBoard { get; set; }
+        public IGameBoard GameBoard { get; set; }
         private IGameLoop GameLoop { get; set; }
         private IList<IGameObject> Players { get; set; } = new List<IGameObject>();
 
@@ -60,6 +60,9 @@ namespace RLEngine.Server
 
             GameBoard = await GameContext.GameBoards
                                  .Include(x => x.GameObjects)
+                                    .ThenInclude(x => x.Components)
+                                  .Include(x => x.GameObjects)
+                                    .ThenInclude(x => x.Messages)
                                  .Include(x => x.GameLoop)
                                  .FirstOrDefaultAsync();
 
@@ -69,7 +72,7 @@ namespace RLEngine.Server
                 GameBoard = new GameBoard(GameLoop);
                 var roomSize = 20;
 
-                GameBoard.AddGameObject(ItemFactory.CreateItem(GameBoard, "Gem", new { value = 10 }), 1, 1, 0);
+                GameBoard.AddGameObject(ItemFactory.CreateItem(GameBoard, "Gem", new { value = 10 }, 1, 1, 0));
                 GameBoard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
                 GameBoard.AddGameObject(GameObjectType.Wall, 1, 3, 0);
                 GameBoard.AddGameObject(GameObjectType.Wall, 3, 2, 0);
@@ -105,11 +108,21 @@ namespace RLEngine.Server
             return true;
         }
 
-        public bool IssuePlayerCommand(IGameObject player, string command)
+
+        public bool IssuePlayerPickupCommand(IGameObject player, string command)
         {
 
-            Direction moveDirection = Direction.None;
 
+
+
+
+
+            return true;
+        }
+
+        public bool IssuePlayerMoveCommand(IGameObject player, string command)
+        {
+            Direction moveDirection = Direction.None;
             if (command == "ArrowRight") moveDirection = Direction.East;
             if (command == "ArrowLeft") moveDirection = Direction.West;
             if (command == "ArrowDown") moveDirection = Direction.South;
@@ -118,12 +131,11 @@ namespace RLEngine.Server
             if (moveDirection != Direction.None)
             {
                 var scheduledAction = new ScheduledAction(player.Id, new MoveAction(player, moveDirection));
-
                 GameBoard.GameLoop.ScheduleAction(scheduledAction);
-                return true;
+
             }
 
-            return false;
+            return true;
 
         }
 
@@ -197,5 +209,17 @@ namespace RLEngine.Server
 
             return str;
         }
+
+        public IList<IGameObject> GetItemsAtPosition(int x, int y, int z)
+        {
+            var position = GameBoard.GetGameBoardPosition(x, y, z);
+            var itemObjects = position.GetGameObjectsWithComponent<ItemComponent>();
+
+            return itemObjects;
+        }
+
     }
+
+
+
 }

@@ -3,11 +3,11 @@ namespace RLEngine.Core
 
     public interface IGameComponent
     {
-
-        Guid GameObjectId { get; set; }
-        IGameObject GameObject { get; set; }
+        public Guid Id { get; set; }
+        public Guid GameObjectId { get; set; }
+        public IGameObject GameObject { get; set; }
+        public string ComponentTypeName { get; set; }
         IDictionary<string, object> Data { get; set; }
-
 
     }
 

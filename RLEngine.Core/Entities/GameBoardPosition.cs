@@ -27,6 +27,13 @@ namespace RLEngine.Core
 
         }
 
+        public IList<IGameObject> GetGameObjectsWithComponent<T>()
+        {
+            var objectsOfType = GameObjects.Where(x => x.GetComponent<T>() != null).ToList();
+            return objectsOfType;
+        }
+
+
         public bool IsNavigable()
         {
             return GameObjects.All(g => g.Navigable);

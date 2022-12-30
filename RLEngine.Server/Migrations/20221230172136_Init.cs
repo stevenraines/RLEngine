@@ -74,6 +74,7 @@ namespace RLEngine.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ComponentTypeName = table.Column<string>(type: "TEXT", nullable: true),
                     GameObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Meta = table.Column<string>(type: "TEXT", nullable: true)
                 },

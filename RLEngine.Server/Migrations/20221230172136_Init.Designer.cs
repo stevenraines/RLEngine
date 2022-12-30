@@ -11,7 +11,7 @@ using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20221228201913_Init")]
+    [Migration("20221230172136_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace RLEngine.Server.Migrations
             modelBuilder.Entity("RLEngine.Core.GameComponent", b =>
                 {
                     b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ComponentTypeName")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("GameObjectId")

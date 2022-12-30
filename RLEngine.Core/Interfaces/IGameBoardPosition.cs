@@ -14,6 +14,7 @@ namespace RLEngine.Core
 
         IList<IGameObject> GameObjects { get; }
         bool IsNavigable();
+        IList<IGameObject> GetGameObjectsWithComponent<T>();
     }
 
 }

@@ -7,17 +7,17 @@ namespace RLEngine.Core.Factories
     public static class ItemFactory
     {
 
-        public static IGameObject CreateItem(IGameBoard gameBoard, string name, object properties)
+        public static IGameObject CreateItem(IGameBoard gameBoard,
+                                                string name,
+                                                object properties,
+                                                int x,
+                                                int y,
+                                                int z)
         {
-            var item = new GameObject(gameBoard, GameObjectType.Item);
+            var item = new GameObject(gameBoard, GameObjectType.Item, x, y, z, 1);
             item.Components.Add(new ItemComponent(name, properties));
             return item;
         }
-        public static IGameObject CreateItem(IGameBoard gameBoard, int x, int y, int z)
-        {
-            return gameBoard.AddGameObject(CreateItem(gameBoard, x, y, z));
 
-
-        }
     }
 }

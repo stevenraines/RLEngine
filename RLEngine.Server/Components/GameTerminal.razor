@@ -29,7 +29,7 @@
 
 
     [Parameter]
-    public IGameObject? Player {get;set;} = null;
+    public IGameObject Player {get;set;} = null;
 
     private string GridColumnString = $"grid-template-columns:{ string.Concat(Enumerable.Repeat("auto ", GameServer.DrawDistance * 2 + 1))}";
 
