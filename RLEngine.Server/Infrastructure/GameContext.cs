@@ -34,8 +34,6 @@ namespace RLEngine.Server.Infrastructure
                 .HasOne(h => (GameLoop)h.GameLoop)
                 .WithOne(h => (GameBoard)h.GameBoard);
 
-
-
             modelBuilder.Entity<GameObject>()
                 .HasMany(h => (IList<GameMessage>)h.Messages)
                 .WithOne(h => (GameObject)h.GameObject)

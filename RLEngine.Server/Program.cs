@@ -24,7 +24,6 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<GameContext>();
     dbContext.Database.Migrate();
-
 }
 
 

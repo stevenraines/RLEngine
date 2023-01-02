@@ -14,7 +14,7 @@ namespace RLEngine.Core
         Guid GameBoardId { get; set; }
         IGameBoard GameBoard { get; set; }
         void ScheduleAction(IScheduledAction scheduledAction);
-        Task<long> ExecuteActions();
+        long ExecuteActions();
     }
 
 }

@@ -29,12 +29,15 @@ namespace RLEngine.Core.Components
 
         }
 
-        public IGameObject DropItem(IGameObject item)
+        public IGameObject DropItem(IGameObject item, int x, int y, int z)
         {
 
             if (item.ContainerGameObjectId != Id) return null;
             if (!item.HasComponent<ItemComponent>()) return null;
             item.ContainerGameObjectId = Guid.Empty;
+            item.X = x;
+            item.Y = y;
+            item.Z = z;
             return item;
 
         }

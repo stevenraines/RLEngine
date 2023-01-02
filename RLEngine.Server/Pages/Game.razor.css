@@ -26,3 +26,8 @@
     border: 1px solid #fff;
 
 }
+
+.hiddeninput {
+    width: 10px;
+    position: fixed;
+}

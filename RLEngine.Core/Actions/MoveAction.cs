@@ -38,8 +38,6 @@ namespace RLEngine.Core
                                                         && n.gameObject.Type != GameObjectType.None
                                                         && n.gameObject.Type != GameObjectType.Floor).Select(n => $"{Enum.GetName(n.gameObject.Type)} to the {Enum.GetName(n.direction)}").ToList();
 
-            Owner.Messages.Add(new GameMessage(Owner.GameBoard.GameLoop.GameTick, string.Join("\n", neighborList)));
-
             return success;
 
         }

@@ -47,6 +47,7 @@ namespace RLEngine.Core
         public GameObject(IGameBoard gameBoard, GameObjectType type)
         {
             GameBoard = gameBoard;
+            GameBoardId = gameBoard.Id;
             Type = type;
 
         }

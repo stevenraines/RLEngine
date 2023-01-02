@@ -39,7 +39,7 @@ namespace RLEngine.Core
                 ScheduledActions.Add(scheduledAction);
         }
 
-        public async Task<long> ExecuteActions()
+        public long ExecuteActions()
         {
             if (GameLoopRunning) return GameTick;
 

@@ -1,3 +1,4 @@
+@inherits GameTerminalBase
 @using RLEngine.Server
 @using RLEngine.Core
 @using RLEngine.Core.Enumerations;
@@ -18,19 +19,3 @@
     </div>
 </div>
 
-@code {
-
-
-    [Parameter]
-    public IList<IGameObject> GameBoardObjects {get;set;} = new List<IGameObject>();
-
-    [Parameter]
-    public string TerminalWidth {get;set;} = $"{GameServer.DrawDistance * 3 + GameServer.DrawDistance/2 -1 }em";
-
-
-    [Parameter]
-    public IGameObject Player {get;set;} = null;
-
-    private string GridColumnString = $"grid-template-columns:{ string.Concat(Enumerable.Repeat("auto ", GameServer.DrawDistance * 2 + 1))}";
-
-}

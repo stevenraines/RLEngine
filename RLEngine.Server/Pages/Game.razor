@@ -4,14 +4,17 @@
 
 <PageTitle>Main Game</PageTitle>
 <div class="gameWindow" tabindex="0" @onkeydown="HandleKeyDown">
-    <InventoryDialog @ref="InventoryDialog" Open="@InventoryDialogOpen" Items="inventoryDialogItems" Mode="Mode" Player="@player"></InventoryDialog>
-    <div class="terminalContainer" @ref="keyRef" >
+    <input class="hiddeninput"  @bind="CommandText" type="text" @ref="keyRef">
+    <!-- Dialogs -->
+    <InventoryDialog OnActionSelected="ScheduleActionHandler" @ref="InventoryDialog" Items="InventoryDialogItems" Player="@player"></InventoryDialog>
+
+    <div class="terminalContainer"  >
 
         <div class="terminalCell" style="grid-column: span 3;">Header</div>
         <div class="terminalCell">Area A</div>
         <GameTerminal Player="@player" GameBoardObjects="@GameBoardObjects"></GameTerminal>
 
-        <HistoryTerminal OnCommandChange="CommandChangeHandler" Player="@player" CommandText="@CommandText"></HistoryTerminal>
+        <HistoryTerminal OnCommandChange="CommandChangeHandler" @ref="HistoryTerminal"  Player="@player" OnClick="@HistoryTerminalClicked"></HistoryTerminal>
 
         <div class="terminalCell">Area B</div>
         <StatusTerminal Player="@player" LastAction="@pressedKey"></StatusTerminal>

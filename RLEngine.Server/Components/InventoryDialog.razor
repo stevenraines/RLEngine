@@ -7,15 +7,33 @@
 @if(Open){
     <div  class="overlay">
         <div class="dialog ascii">
+        @if(Step == InventoryDialogStep.SelectItem){
             <div>Inventory!</div>
-            <table>
-            @for(var itemIndex = 1; itemIndex <= Items.Count(); itemIndex++){
-                var item = Items[itemIndex-1];
+            <table class="ascii">
+            @foreach(var entry in GetItemSelectionOptions()){
+                var item = entry.item;
                 var itemComponent = item.GetComponent<ItemComponent>();
-                <tr><td>@itemIndex</td><td>@item.Name</td><td>@itemComponent.Value</td></tr>
+                <tr>
+                    <td>@entry.character</td>
+                    <td>@item.Name</td>
+                    <td>@itemComponent.Value</td>
+                </tr>
             }
             </table>
-            <pre>@GameServer.GameTick</pre>
+        }
+        @if(Step == InventoryDialogStep.SelectAction){
+
+                <div>Actions</div>
+                <div>What do you want to do with @SelectedItem.Name</div>
+                <table class="ascii">
+                <tr>
+                    <td>d</td>
+                    <td><u>D</u>rop</td>
+                </tr>
+                </table>
+
+
+        }
         </div>
     </div>
 }

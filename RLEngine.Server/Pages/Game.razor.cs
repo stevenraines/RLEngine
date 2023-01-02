@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
 using RLEngine.Core;
 using RLEngine.Core.Components;
-using RLEngine.Server;
 using RLEngine.Server.Components;
 
 namespace RLEngine.Server
@@ -15,26 +14,25 @@ namespace RLEngine.Server
         [Inject] GameServer GameServer { get; set; }
         [Inject] ProtectedLocalStorage protectedLocalStorage { get; set; }
 
-
         protected InventoryDialog InventoryDialog { get; set; }
-        protected InventoryDialogMode Mode { get; set; } = InventoryDialogMode.Player;
+        protected HistoryTerminal HistoryTerminal { get; set; }
 
         protected System.Threading.Timer timer = null;
         protected long lastTick;
-        protected string CommandText { get; set; } = "TEST";
+        protected string CommandText { get; set; } = "";
         protected IList<IGameObject> GameBoardObjects = new List<IGameObject>();
         protected ElementReference keyRef;
         protected string pressedKey = "";
-
-        protected bool InventoryDialogOpen = false;
-        protected IList<IGameObject> inventoryDialogItems = new List<IGameObject>();
+        protected IList<IGameObject> InventoryDialogItems = new List<IGameObject>();
 
         protected Guid? playerId = null;
         protected IGameObject player;
+        private bool terminalFocused = false;
 
-        protected override void OnInitialized()
+        protected async override void OnInitialized()
         {
 
+            if (GameServer.GameBoard == null) await GameServer.InitializeGameBoard();
 
 
             timer = new System.Threading.Timer(async _ =>  // async void
@@ -52,7 +50,7 @@ namespace RLEngine.Server
                     await InvokeAsync(StateHasChanged);
                 }
 
-            }, null, 0, (int)GameServer.GameTimer.Interval / 2);
+            }, null, 0, (int)GameServer.GameSpeed / 2);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -88,11 +86,27 @@ namespace RLEngine.Server
 
         }
 
+        protected void ScheduleActionHandler<T>(T action) where T : IAction
+        {
+            player.GameBoard.GameLoop.ScheduleAction(new ScheduledAction(player.Id, action));
+        }
+
         protected void CommandChangeHandler(string command)
         {
+            if (!terminalFocused) return;
             CommandText = command;
             ParseTextCommand(command);
             CommandText = "";
+            terminalFocused = false;
+            keyRef.FocusAsync();
+
+        }
+
+        protected void HistoryTerminalClicked()
+        {
+            HistoryTerminal.Focus();
+            terminalFocused = true;
+
         }
 
         protected void ParseTextCommand(string command)
@@ -103,60 +117,75 @@ namespace RLEngine.Server
 
         }
 
-
         protected void HandleKeyDown(KeyboardEventArgs e)
         {
-            pressedKey = e.Key;
 
 
+            if (player == null) return;
 
-            if (player != null)
+
+            if (IssuePlayerCommand(player, e))
             {
-
-
-                if (IssuePlayerCommand(player, pressedKey))
-                {
-                    CommandText = "";
-                }
-
+                CommandText = "";
             }
 
         }
 
 
-        protected bool IssuePlayerCommand(IGameObject player, string command)
+        protected bool IssuePlayerCommand(IGameObject player, KeyboardEventArgs e)
         {
-            var inventory = player.GetComponent<InventoryComponent>();
+            var command = e.Key;
 
-
-            if (InventoryDialogOpen)
+            if (terminalFocused)
             {
-                if (pressedKey == "1" || pressedKey == "2")
+                CommandText = "";
+                if (command == "Escape")
                 {
-                    var index = int.Parse(pressedKey) - 1;
-                    var item = inventoryDialogItems.ElementAt(index);
-
-                    if (Mode == InventoryDialogMode.GameBoard)
-                    {
-                        inventory.PickupItem(item);
-                        InventoryDialogOpen = false;
-                        return true;
-                    }
-                    if (Mode == InventoryDialogMode.Player)
-                    {
-                        item.X = player.X;
-                        item.Y = player.Y;
-                        item.Z = player.Z;
-
-                        inventory.DropItem(item);
-                        InventoryDialogOpen = false;
-                        return true;
-                    }
-
-
+                    terminalFocused = false;
+                    keyRef.FocusAsync();
                 }
 
+
+                return false;
             }
+
+            keyRef.FocusAsync();
+
+            if (e.Key == "`")
+            {
+                HistoryTerminalClicked();
+            }
+
+
+            // if the inventory dialog is open, route command there.
+            if (InventoryDialog.Open)
+                return HandleInventoryDialogAction(e);
+
+            // if the CTRL key is pressed, do alternate actions
+            if (e.CtrlKey)
+                return HandlePlayerCtrlAction(player, e);
+
+            // handle unmodified actions.
+            return HandlePlayerStandardAction(player, e);
+
+        }
+
+        public bool HandleInventoryDialogAction(KeyboardEventArgs e)
+        {
+            // allow the dialog to handle keypresses until closed;
+            InventoryDialog.HandleKeyDown(e);
+            return true;
+        }
+
+        public bool HandlePlayerCtrlAction(IGameObject player, KeyboardEventArgs e)
+        {
+            var command = e.Key;
+            return false;
+        }
+
+        public bool HandlePlayerStandardAction(IGameObject player, KeyboardEventArgs e)
+        {
+            var command = e.Key;
 
             switch (command)
             {
@@ -166,38 +195,43 @@ namespace RLEngine.Server
                 case "ArrowUp":
                     return GameServer.IssuePlayerMoveCommand(player, command);
                 case "i":
-                    if (!InventoryDialogOpen)
+                    if (!InventoryDialog.Open)
                     {
 
-                        inventoryDialogItems = inventory.Items;
-                        Mode = InventoryDialogMode.Player;
-                        InventoryDialogOpen = true;
+                        InventoryDialogItems = player.GetComponent<InventoryComponent>().Items;
+                        InventoryDialog.Mode = InventoryDialogMode.Player;
+                        InventoryDialog.ToggleDialog();
                         return true;
                     }
                     return true;
                 case "p":
-                    if (!InventoryDialogOpen)
+                    if (!InventoryDialog.Open)
                     {
 
-                        inventoryDialogItems = GameServer.GetItemsAtPosition(player.X, player.Y, player.Z);
-                        if (inventoryDialogItems.Count == 0)
+                        InventoryDialogItems = GameServer.GetItemsAtPosition(player.X, player.Y, player.Z);
+                        if (InventoryDialogItems.Count == 0)
                         {
                             player.AddMessage($"There are no items here.");
 
                             return false;
                         }
-                        Mode = InventoryDialogMode.GameBoard;
-                        InventoryDialogOpen = true;
+
+                        InventoryDialog.SelectedAction = new PickUpItemAction(player, null);
+
+                        InventoryDialog.Mode = InventoryDialogMode.GameBoard;
+
+                        InventoryDialog.ToggleDialog();
                         return true;
                     }
                     return true;
 
                 case "Escape":
-                    InventoryDialogOpen = false;
+                    InventoryDialog.Open = false;
                     return true;
             }
-            return false;
-        }
 
+            return false;
+
+        }
     }
 }
