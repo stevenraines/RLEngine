@@ -9,6 +9,8 @@ namespace RLEngine.Core.Components
 
         public string Name { get; set; }
 
+        public Guid? ItemId { get; set; } = null;
+
         protected EquipmentSlot()
         {
         }
@@ -17,7 +19,6 @@ namespace RLEngine.Core.Components
         {
             Name = name;
         }
-
 
     }
 }

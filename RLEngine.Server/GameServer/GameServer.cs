@@ -62,7 +62,7 @@ namespace RLEngine.Server
             var roomSize = 20;
 
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new { value = 100 }, 1, 1, 0));
-            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Sword", new { value = 10 }, 2, 2, 0));
+            gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new { value = 10 }, 2, 2, 0));
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Torch", new { value = 1 }, 2, 2, 0));
 
             gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace RLEngine.Core.Components
 {
@@ -7,14 +8,15 @@ namespace RLEngine.Core.Components
     public class EquipmentComponent : GameComponent
     {
 
-
-        public ISet<IEquipmentSlot> Slots = new HashSet<IEquipmentSlot>();
+        [JsonInclude]
+        public HashSet<EquipmentSlot> Slots = new HashSet<EquipmentSlot>();
 
         protected EquipmentComponent()
         {
         }
 
-        public EquipmentComponent(ISet<IEquipmentSlot> slots)
+
+        public EquipmentComponent(HashSet<EquipmentSlot> slots)
         {
             Slots = slots;
         }
@@ -23,20 +25,26 @@ namespace RLEngine.Core.Components
         {
 
             if (!item.HasComponent<EquipableComponent>()) return null;
-            item.ContainerGameObjectId = Id;
+            var acceptableSlots = item.GetComponent<EquipableComponent>().AcceptableSlots;
+
+            if (acceptableSlots == null) return null;
+
+            if (!acceptableSlots.Any(x => x.Name == slot.Name))
+            {
+                return null;
+            }
+
+            // remove the item if it was in another slot!
+            Slots.Where(x => x.ItemId == item.Id).ToList().ForEach(y => y.ItemId = null);
+            slot.ItemId = item.Id;
             return item;
 
         }
 
-        public IGameObject UnequipItem(IGameObject item, IEquipmentSlot slot)
+        public IEquipmentSlot UnequipItem(IEquipmentSlot slot)
         {
-
-            if (item.ContainerGameObjectId != Id) return null;
-            if (!item.HasComponent<ItemComponent>()) return null;
-            item.ContainerGameObjectId = Guid.Empty;
-
-            return item;
-
+            slot.ItemId = null;
+            return slot;
         }
 
     }

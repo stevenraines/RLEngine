@@ -43,11 +43,13 @@ namespace RLEngine.Core.Components
         }
 
 
-        public IList<IGameObject> GetEquipableItems<IEquipmentSlot>()
+        public IList<IGameObject> GetEquipableItems(IEquipmentSlot slot)
         {
 
+            if (slot == null) return null;
+
             return Items.Where(x => x.GetComponent<EquipableComponent>() != null
-                        && x.GetComponent<EquipableComponent>().AcceptableSlots.Any(x => x.GetType() == typeof(IEquipmentSlot))).ToList();
+                        && x.GetComponent<EquipableComponent>().AcceptableSlots.Any(x => x.Name == slot.Name)).ToList();
 
         }
 

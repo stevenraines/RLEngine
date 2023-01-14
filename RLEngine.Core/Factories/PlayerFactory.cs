@@ -19,7 +19,7 @@ namespace RLEngine.Core.Factories
         private static EquipmentComponent CreateStandardCreatureEquipmentComponent()
         {
 
-            var equipmentSlots = new HashSet<IEquipmentSlot>();
+            var equipmentSlots = new HashSet<EquipmentSlot>();
             equipmentSlots.Add(new EquipmentSlot("Melee Weapon"));
             equipmentSlots.Add(new EquipmentSlot("Alternate Melee Weapon"));
             equipmentSlots.Add(new EquipmentSlot("Left Hand"));

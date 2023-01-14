@@ -1,0 +1,78 @@
+@inherits EquipmentDialogBase
+@using RLEngine.Server
+@using RLEngine.Core
+@using RLEngine.Core.Components;
+@inject RLEngine.Server.GameServer GameServer
+
+@if(Open){
+<div class="overlay">
+    <div class="dialog ascii">
+        @if(Step == EquipmentDialogStep.SelectSlot){
+        <div>Equipment!</div>
+        <table class="ascii">
+            @foreach(var entry in GetEquipmentSlotSelectionOptions()){
+            <tr>
+                <td>@entry.character</td>
+                <td>@entry.slotName</td>
+                <td>
+                    @entry.itemName
+                </td>
+                <td>@entry.applicableItemCount</td>
+            </tr>
+            }
+        </table>
+        }
+        @if(Step == EquipmentDialogStep.SelectAction){
+        var slotName = @SelectedSlot.Name;
+        var slotItemName = @SelectedSlotItem?.Name;
+        <div>Actions</div>
+        <table>
+            <tr>
+                <td>
+                    <table class="ascii">
+                        @if(@SelectedSlot.ItemId != null){
+                        <tr>
+                            <td>u</td>
+                            <td><u>U</u>nequip @slotItemName</td>
+                        </tr>
+                        <tr>
+                            <td>d</td>
+                            <td><u>D</u>rop @slotItemName</td>
+                        </tr>
+                        }
+                        <tr>
+                            <td>e</td>
+                            <td><u>E</u>quip</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        }
+        @if(Step == EquipmentDialogStep.SelectItem){
+        <table>
+            <tr>
+                <td>Equipment available for @SelectedSlot.Name
+                    <table class="ascii">
+
+                        @if(GetEquipableItemSelectionOptions().Count == 0){
+                        <span>No items for this slot.</span>
+                        }
+
+                        @foreach(var entry in GetEquipableItemSelectionOptions()){
+                        var item = entry.item;
+                        var itemComponent = item.GetComponent<ItemComponent>();
+                            <tr>
+                                <td>@entry.character</td>
+                                <td>@item.Name</td>
+                                <td>@itemComponent.Value</td>
+                            </tr>
+                            }
+                    </table>
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+</div>
+}

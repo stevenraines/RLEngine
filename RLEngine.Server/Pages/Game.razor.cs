@@ -15,6 +15,7 @@ namespace RLEngine.Server
         [Inject] ProtectedLocalStorage protectedLocalStorage { get; set; }
 
         protected InventoryDialog InventoryDialog { get; set; }
+        protected EquipmentDialog EquipmentDialog { get; set; }
         protected HistoryTerminal HistoryTerminal { get; set; }
 
         protected System.Threading.Timer timer = null;
@@ -156,6 +157,9 @@ namespace RLEngine.Server
                 HistoryTerminalClicked();
             }
 
+            // if the equipment dialog is open, route command there.
+            if (EquipmentDialog.Open)
+                return HandleEquipmentDialogAction(e);
 
             // if the inventory dialog is open, route command there.
             if (InventoryDialog.Open)
@@ -168,6 +172,13 @@ namespace RLEngine.Server
             // handle unmodified actions.
             return HandlePlayerStandardAction(player, e);
 
+        }
+
+        public bool HandleEquipmentDialogAction(KeyboardEventArgs e)
+        {
+            // allow the dialog to handle keypresses until closed;
+            EquipmentDialog.HandleKeyDown(e);
+            return true;
         }
 
         public bool HandleInventoryDialogAction(KeyboardEventArgs e)
@@ -194,10 +205,15 @@ namespace RLEngine.Server
                 case "ArrowDown":
                 case "ArrowUp":
                     return GameServer.IssuePlayerMoveCommand(player, command);
+                case "e":
+                    if (!EquipmentDialog.Open)
+                    {
+                        EquipmentDialog.ToggleDialog();
+                    }
+                    return true;
                 case "i":
                     if (!InventoryDialog.Open)
                     {
-
                         InventoryDialogItems = player.GetComponent<InventoryComponent>().Items;
                         InventoryDialog.Mode = InventoryDialogMode.Player;
                         InventoryDialog.ToggleDialog();
@@ -217,16 +233,13 @@ namespace RLEngine.Server
                         }
 
                         InventoryDialog.SelectedAction = new PickUpItemAction(player, null);
-
                         InventoryDialog.Mode = InventoryDialogMode.GameBoard;
-
                         InventoryDialog.ToggleDialog();
                         return true;
                     }
                     return true;
 
                 case "Escape":
-                    InventoryDialog.Open = false;
                     return true;
             }
 

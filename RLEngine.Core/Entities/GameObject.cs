@@ -135,7 +135,11 @@ namespace RLEngine.Core
 
         public string SerializedComponents
         {
-            get { return JsonSerializer.Serialize(Components); }
+            get
+            {
+                var components = JsonSerializer.Serialize(Components);
+                return components;
+            }
             set
             {
 
@@ -144,18 +148,32 @@ namespace RLEngine.Core
                 if (string.IsNullOrEmpty(value)) return;
                 var components = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(value);
 
+                if (components == null || components.Count == 0) return;
+
                 foreach (var component in components)
                 {
 
-                    var componentTypeName = component.Key.ToString();
-                    Type T = System.Type.GetType(componentTypeName);
-                    var obj = (JsonElement)component.Value;
-                    var cmp = JsonSerializer.Deserialize(obj.GetRawText(), T);
-                    if (cmp is IGameComponent)
-                        ((IGameComponent)cmp).GameObject = this;
-                    componentList.Add(componentTypeName, cmp);
+                    try
+                    {
+
+                        var componentTypeName = component.Key.ToString();
+                        Type T = System.Type.GetType(componentTypeName);
+                        var obj = (JsonElement)component.Value;
+                        var options = new JsonSerializerOptions();
+                        options.IncludeFields = true;
+                        options.IgnoreReadOnlyFields = true;
+
+                        var cmp = JsonSerializer.Deserialize(obj.GetRawText(), T, options);
+                        if (cmp is IGameComponent)
+                            ((IGameComponent)cmp).GameObject = this;
+                        componentList.Add(componentTypeName, cmp);
 
 
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
 
                 }
 

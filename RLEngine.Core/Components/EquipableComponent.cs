@@ -5,11 +5,11 @@ namespace RLEngine.Core.Components
     public class EquipableComponent : GameComponent
     {
 
-        public ISet<IEquipmentSlot> AcceptableSlots { get; set; } = new HashSet<IEquipmentSlot>();
+        public ISet<EquipmentSlot> AcceptableSlots { get; set; } = new HashSet<EquipmentSlot>();
 
         public EquipableComponent() { }
 
-        public EquipableComponent(ISet<IEquipmentSlot> acceptableSlots) : base()
+        public EquipableComponent(HashSet<EquipmentSlot> acceptableSlots) : base()
         {
             AcceptableSlots = acceptableSlots;
         }
