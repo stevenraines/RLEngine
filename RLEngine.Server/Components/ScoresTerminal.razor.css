@@ -1,0 +1,12 @@
+div.ascii {
+    padding: 1em;
+    margin: 0em;
+    line-height: 1em;
+    caret-color: transparent;
+    overflow: hidden;
+}
+
+div.terminalCell {
+    padding: 5px;
+    border: 1px solid #fff;
+}

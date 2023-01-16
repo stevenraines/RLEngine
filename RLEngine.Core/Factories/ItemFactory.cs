@@ -4,7 +4,6 @@ using RLEngine.Core.Components;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-
 namespace RLEngine.Core.Factories
 {
     public static class ItemFactory
@@ -12,7 +11,7 @@ namespace RLEngine.Core.Factories
 
         public static IGameObject CreateItem(IGameBoard gameBoard,
                                                 string name,
-                                                object properties,
+                                                dynamic properties,
                                                 int x,
                                                 int y,
                                                 int z)
@@ -24,7 +23,7 @@ namespace RLEngine.Core.Factories
 
         public static IGameObject CreateMeleeWeapon(IGameBoard gameBoard,
                                                string name,
-                                               object properties,
+                                               dynamic properties,
                                                int x,
                                                int y,
                                                int z)
@@ -43,7 +42,7 @@ namespace RLEngine.Core.Factories
 
         public static IGameObject CreateWeapon(IGameBoard gameBoard,
                                                 string name,
-                                                object properties,
+                                                dynamic properties,
                                                 int x,
                                                 int y,
                                                 int z)
@@ -57,6 +56,23 @@ namespace RLEngine.Core.Factories
             return item;
         }
 
+        public static IGameObject CreateHealthRing(IGameBoard gameBoard,
+                                              string name,
+                                              int value,
+                                              int x,
+                                              int y,
+                                              int z)
+        {
+            var item = new GameObject(gameBoard, GameObjectType.Item, name, x, y, z, 1);
+            item.AddComponent(new ItemComponent(100));
+            var validSlots = new HashSet<EquipmentSlot>();
+            validSlots.Add(new EquipmentSlot("Left Hand"));
+            validSlots.Add(new EquipmentSlot("Right Hand"));
+            item.AddComponent(new EquipableComponent(validSlots));
+            item.AddComponent(new HealthScoreModifierComponent(value));
+            return item;
+        }
 
     }
+
 }

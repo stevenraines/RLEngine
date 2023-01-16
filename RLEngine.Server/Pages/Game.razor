@@ -12,10 +12,11 @@
     <div class="terminalContainer">
 
         <div class="terminalCell" style="grid-column: span 3;">Header</div>
-        <div class="terminalCell">Area A</div>
+        <ScoresTerminal Player="@player" @ref="ScoresTerminal"></ScoresTerminal>
+
         <GameTerminal Player="@player" GameBoardObjects="@GameBoardObjects"></GameTerminal>
 
-        <HistoryTerminal OnCommandChange="CommandChangeHandler" @ref="HistoryTerminal" Player="@player" OnClick="@HistoryTerminalClicked"></HistoryTerminal>
+        <HistoryTerminal OnCommandChange="CommandChangeHandler" @ref="HistoryTerminal" Player="@player" OnClick="HistoryTerminalClicked"></HistoryTerminal>
 
         <div class="terminalCell">Area B</div>
         <StatusTerminal Player="@player" LastAction="@pressedKey"></StatusTerminal>

@@ -47,5 +47,37 @@ namespace RLEngine.Core.Components
             return slot;
         }
 
+        public List<IGameObject> GetEquippedItemsByComponent<T>()
+        {
+
+            var gameObjectsWithComponent = new List<IGameObject>();
+
+            var equipmentGameObjectIds = GameObject.GetComponent<EquipmentComponent>().Slots.Where(x => x.ItemId != null).Select(x => x.ItemId).ToList();
+            var gameObjects = GameObject.GameBoard.GameObjects.Where(x => equipmentGameObjectIds.Contains(x.Id)).ToList();
+
+            foreach (var gameObject in gameObjects)
+            {
+
+                foreach (var component in gameObject.Components)
+                {
+                    var x = component.Value.GetType();
+                    var y = typeof(HealthScoreModifierComponent);
+                    var z = x == y;
+
+                }
+
+
+                if (gameObject.Components.Any(x => x.Value.GetType() == typeof(HealthScoreModifierComponent)))
+                    gameObjectsWithComponent.Add(gameObject);
+
+            }
+
+            return gameObjectsWithComponent;
+
+        }
+
+
+
+
     }
 }

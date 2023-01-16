@@ -18,6 +18,8 @@ namespace RLEngine.Server
         protected EquipmentDialog EquipmentDialog { get; set; }
         protected HistoryTerminal HistoryTerminal { get; set; }
 
+        protected ScoresTerminal ScoresTerminal { get; set; }
+
         protected System.Threading.Timer timer = null;
         protected long lastTick;
         protected string CommandText { get; set; } = "";

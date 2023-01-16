@@ -12,7 +12,7 @@ namespace RLEngine.Core.Factories
             var player = new GameObject(gameBoard, GameObjectType.Player, "Player1", 0, 0, 0, 10);
             player.AddComponent(new InventoryComponent());
             player.AddComponent(PlayerFactory.CreateStandardCreatureEquipmentComponent());
-
+            player.AddComponent(new HealthScoreComponent(5, 5));
             return player;
         }
 

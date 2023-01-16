@@ -64,10 +64,14 @@ namespace RLEngine.Server
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new { value = 100 }, 1, 1, 0));
             gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new { value = 10 }, 2, 2, 0));
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Torch", new { value = 1 }, 2, 2, 0));
+            gameboard.AddGameObject(ItemFactory.CreateHealthRing(gameboard, "Ring of Health", 5, 2, 2, 0));
 
-            gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
+            /*
+                        gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
+            */
             gameboard.AddGameObject(GameObjectType.Wall, 1, 3, 0);
             gameboard.AddGameObject(GameObjectType.Wall, 3, 2, 0);
+
             gameboard.AddGameObject(GameObjectType.Monster, -2, -2, 0);
 
             return gameboard;
