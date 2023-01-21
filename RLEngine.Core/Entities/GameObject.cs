@@ -171,7 +171,7 @@ namespace RLEngine.Core
 
 
                     }
-                    catch (Exception ex)
+                    catch
                     {
 
                     }

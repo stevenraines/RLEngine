@@ -1,5 +1,6 @@
 using RLEngine.Core;
 using RLEngine.Core.Events;
+using RLEngine.Core.Enumerations;
 
 namespace RLEngine.Core.Components.Scores
 {

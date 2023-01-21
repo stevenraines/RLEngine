@@ -13,15 +13,19 @@ namespace RLEngine.Core.Factories
             var player = new GameObject(gameBoard, GameObjectType.Player, "Player1", 0, 0, 0, 10);
             player.AddComponent(new InventoryComponent());
             player.AddComponent(PlayerFactory.CreateStandardCreatureEquipmentComponent());
-            player.AddComponent(new ScoreComponent(new HealthScore(), 5));
-            player.AddComponent(new ScoreComponent(new AttackScore(), 10));
-            player.AddComponent(new ScoreComponent(new DefenseScore(), 10));
-            player.AddComponent(new ScoreComponent(new StrengthScore(), 10));
-            player.AddComponent(new ScoreComponent(new DexterityScore(), 10));
-            player.AddComponent(new ScoreComponent(new WisdomScore(), 10));
-            player.AddComponent(new ScoreComponent(new IntelligenceScore(), 10));
-            player.AddComponent(new ScoreComponent(new ConstitutionScore(), 10));
-            player.AddComponent(new ScoreComponent(new CharismaScore(), 10));
+
+            var scoreComponent = new ScoreComponent();
+
+            scoreComponent.AddScore(ScoreType.HealthScore, 5);
+            scoreComponent.AddScore(ScoreType.AttackScore, 10);
+            scoreComponent.AddScore(ScoreType.DefenseScore, 10);
+            scoreComponent.AddScore(ScoreType.StrengthScore, 10);
+            scoreComponent.AddScore(ScoreType.DexterityScore, 10);
+            scoreComponent.AddScore(ScoreType.WisdomScore, 10);
+            scoreComponent.AddScore(ScoreType.IntelligenceScore, 10);
+            scoreComponent.AddScore(ScoreType.ConstitutionScore, 10);
+            scoreComponent.AddScore(ScoreType.CharismaScore, 10);
+            player.AddComponent(scoreComponent);
 
             return player;
         }

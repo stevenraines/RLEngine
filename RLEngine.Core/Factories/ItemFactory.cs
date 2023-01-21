@@ -111,7 +111,7 @@ namespace RLEngine.Core.Factories
             validSlots.Add(new EquipmentSlot("Left Hand"));
             validSlots.Add(new EquipmentSlot("Right Hand"));
             item.AddComponent(new EquipableComponent(validSlots));
-            item.AddComponent(new ScoreModifierComponent(new HealthScore(), value));
+            item.AddComponent(new ScoreModifierComponent(ScoreType.HealthScore, 5));
             return item;
         }
 

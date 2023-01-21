@@ -62,13 +62,13 @@ namespace RLEngine.Server
 
             var gameboard = new GameBoard(GameLoop);
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new ItemComponentConfiguration() { Value = 100 }, 1, 1, 0));
-            gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new ItemComponentConfiguration() { Value = 10, ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(new AttackScore(), 2) } }, 2, 2, 0));
+            gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new ItemComponentConfiguration() { Value = 10, ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(ScoreType.AttackScore, 2) } }, 2, 2, 0));
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Torch", new ItemComponentConfiguration() { Value = 1 }, 2, 2, 0));
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Helm", new ItemComponentConfiguration()
             {
                 Value = 50,
                 EquipmentSlots = new HashSet<EquipmentSlot>() { new EquipmentSlot("Head") },
-                ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(new DefenseScore(), 2) }
+                ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(ScoreType.DefenseScore, 2) }
             }, 4, -1, 0));
             gameboard.AddGameObject(ItemFactory.CreateHealthRing(gameboard, "Ring of Health", 5, 3, 1, 0));
 

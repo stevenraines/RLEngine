@@ -17,7 +17,6 @@ namespace RLEngine.Core.Components
         {
         }
 
-
         public EquipmentComponent(HashSet<EquipmentSlot> slots)
         {
             Slots = slots;
@@ -69,17 +68,8 @@ namespace RLEngine.Core.Components
             foreach (var gameObject in gameObjects)
             {
 
-                foreach (var component in gameObject.Components)
-                {
-                    var x = component.Value.GetType();
-                    var y = typeof(ScoreModifierComponent);
-                    var z = (IDictionary<string, dynamic>)component.Value.GameObject.Components;
-                    var scoreComponents = gameObject.Components.Where(x => x.Value.GetType() == typeof(ScoreModifierComponent));
-                    var aa = scoreComponents.Any(x => x.Value.ScoreType == typeof(T));
-                }
 
-
-                if (gameObject.Components.Any(x => x.Value.GetType() == typeof(ScoreModifierComponent)))
+                if (gameObject.Components.Any(x => x.Value.GetType() == typeof(T)))
                     gameObjectsWithComponent.Add(gameObject);
 
             }
