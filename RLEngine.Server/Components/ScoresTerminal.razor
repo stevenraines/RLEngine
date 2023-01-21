@@ -5,7 +5,39 @@
     <table>
         <tr>
             <td>Health</td>
-            <td>@Health / @MaxHealth</td>
+            <td>@Health?.CurrentValue / @Health?.CurrentMaxValue</td>
+        </tr>
+        <tr>
+            <td>Attack</td>
+            <td>@Attack?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Defense</td>
+            <td>@Defense?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Strength</td>
+            <td>@Strength?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Dexterity</td>
+            <td>@Dexterity?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Wisdom</td>
+            <td>@Wisdom?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Intelligence</td>
+            <td>@Intelligence?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Constitution</td>
+            <td>@Constitution?.CurrentValue</td>
+        </tr>
+        <tr>
+            <td>Charisma</td>
+            <td>@Charisma?.CurrentValue</td>
         </tr>
     </table>
 </div>

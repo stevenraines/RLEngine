@@ -2,6 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
+using RLEngine.Core.Components.Scores;
+using System.Collections.Generic;
 namespace RLEngine.Core.Components
 {
 
@@ -47,6 +49,15 @@ namespace RLEngine.Core.Components
             return slot;
         }
 
+        public List<ScoreModifierComponent> GetScoreModifierComponents<T>()
+        {
+
+            var scoreModifierComponentItems = GetEquippedItemsByComponent<ScoreModifierComponent>();
+            return scoreModifierComponentItems.Select(x => (ScoreModifierComponent)x.Components.Where(x => x.Value.GetType() == typeof(ScoreModifierComponent))).Where(x => x.ScoreType.GetType() == typeof(T)).ToList();
+
+        }
+
+
         public List<IGameObject> GetEquippedItemsByComponent<T>()
         {
 
@@ -61,13 +72,14 @@ namespace RLEngine.Core.Components
                 foreach (var component in gameObject.Components)
                 {
                     var x = component.Value.GetType();
-                    var y = typeof(HealthScoreModifierComponent);
-                    var z = x == y;
-
+                    var y = typeof(ScoreModifierComponent);
+                    var z = (IDictionary<string, dynamic>)component.Value.GameObject.Components;
+                    var scoreComponents = gameObject.Components.Where(x => x.Value.GetType() == typeof(ScoreModifierComponent));
+                    var aa = scoreComponents.Any(x => x.Value.ScoreType == typeof(T));
                 }
 
 
-                if (gameObject.Components.Any(x => x.Value.GetType() == typeof(HealthScoreModifierComponent)))
+                if (gameObject.Components.Any(x => x.Value.GetType() == typeof(ScoreModifierComponent)))
                     gameObjectsWithComponent.Add(gameObject);
 
             }

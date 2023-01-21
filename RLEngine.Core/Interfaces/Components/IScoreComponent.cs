@@ -11,8 +11,8 @@ namespace RLEngine.Core
         int Value { get; set; }
 
         int MaxValue { get; set; }
-
-        int ModifiedMaxValue { get; }
+        int CurrentValue { get; }
+        int CurrentMaxValue { get; }
 
         event EventHandler ValueChanged;
 

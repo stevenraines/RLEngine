@@ -123,8 +123,9 @@ namespace RLEngine.Core
             var trueKeyName = Components.Keys.Where(x => x == typeof(T).AssemblyQualifiedName).FirstOrDefault();
             if (trueKeyName == null) return default(T);
             return Components.Where(x => x.Key == trueKeyName).Select(x => x.Value).FirstOrDefault();
-
         }
+
+
         public bool HasComponent<T>()
         {
 

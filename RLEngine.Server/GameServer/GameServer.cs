@@ -6,6 +6,7 @@ using RLEngine.Core;
 using RLEngine.Core.Enumerations;
 using RLEngine.Core.Generators;
 using RLEngine.Core.Components;
+using RLEngine.Core.Components.Scores;
 using RLEngine.Core.Factories;
 using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server
@@ -16,7 +17,7 @@ namespace RLEngine.Server
         public const int TileSize = 16;
         public const int DrawDistance = 12;
         public const int GameSpeed = 250; // ms per tick
-        public const int TicksBetweenSaves = 20;
+        public const int TicksBetweenSaves = 8;
 
         private readonly GameContext GameContext;
         private DbContextOptions<GameContext> DbOptions;
@@ -58,13 +59,18 @@ namespace RLEngine.Server
         public IGameBoard ConfigureDefaultGameBoard()
         {
             GameLoop = new GameLoop(GameLoopType.Timed); ;
-            var gameboard = new GameBoard(GameLoop);
-            var roomSize = 20;
 
-            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new { value = 100 }, 1, 1, 0));
-            gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new { value = 10 }, 2, 2, 0));
-            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Torch", new { value = 1 }, 2, 2, 0));
-            gameboard.AddGameObject(ItemFactory.CreateHealthRing(gameboard, "Ring of Health", 5, 2, 2, 0));
+            var gameboard = new GameBoard(GameLoop);
+            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new ItemComponentConfiguration() { Value = 100 }, 1, 1, 0));
+            gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new ItemComponentConfiguration() { Value = 10, ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(new AttackScore(), 2) } }, 2, 2, 0));
+            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Torch", new ItemComponentConfiguration() { Value = 1 }, 2, 2, 0));
+            gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Helm", new ItemComponentConfiguration()
+            {
+                Value = 50,
+                EquipmentSlots = new HashSet<EquipmentSlot>() { new EquipmentSlot("Head") },
+                ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(new DefenseScore(), 2) }
+            }, 4, -1, 0));
+            gameboard.AddGameObject(ItemFactory.CreateHealthRing(gameboard, "Ring of Health", 5, 3, 1, 0));
 
             /*
                         gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
