@@ -10,6 +10,7 @@ namespace RLEngine.Core
 
     public class GameLoop : IGameLoop
     {
+        public event EventHandler GameTickProcessed;
         public Guid Id { get; set; } = Guid.NewGuid();
         public GameLoopType Type { get; }
         public Guid GameBoardId { get; set; }
@@ -23,13 +24,11 @@ namespace RLEngine.Core
 
         public IList<IScheduledAction> ScheduledActions { get; } = new List<IScheduledAction>();
 
-
         public GameLoop() { }
 
         public GameLoop(GameLoopType type)
         {
             Type = type;
-
         }
 
         public void ScheduleAction(IScheduledAction scheduledAction)
@@ -63,6 +62,7 @@ namespace RLEngine.Core
                 NextLoop = executeStartTime.AddMilliseconds(LoopFrequencyMS);
 
                 GameTick += 1;
+                GameTickProcessed.Invoke(this, new EventArgs());
 
             }
             finally

@@ -8,6 +8,8 @@ namespace RLEngine.Core
 
     public interface IGameLoop
     {
+        event EventHandler GameTickProcessed;
+
         GameLoopType Type { get; }
         long GameTick { get; set; }
         IList<IScheduledAction> ScheduledActions { get; }

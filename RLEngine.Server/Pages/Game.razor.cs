@@ -32,35 +32,32 @@ namespace RLEngine.Server
         protected IGameObject player;
         private bool terminalFocused = false;
 
+        private string priorObjectHash { get; set; } = "";
+
         protected async override void OnInitialized()
         {
 
             if (GameServer.GameBoard == null) await GameServer.InitializeGameBoard();
 
+            GameServer.GameBoard.GameLoop.GameTickProcessed += async (s, e) => await HandleGameLoopComplete(s, e);
 
-            timer = new System.Threading.Timer(async _ =>  // async void
-            {
 
-                if (GameServer.GameTick <= lastTick) return;
+        }
 
-                if (player != null)
-                {
+        public async Task<bool> HandleGameLoopComplete(object sender, EventArgs args)
+        {
+            if (player == null) return false;
 
-                    GameBoardObjects = GameServer.GetGameBoardObjectsToRender(player.X, player.Y, player.Z);
+            GameBoardObjects = GameServer.GetGameBoardObjectsToRender(player.X, player.Y, player.Z);
 
-                    // we need StateHasChanged() because this is an async void handler
-                    // we need to Invoke it because we could be on the wrong Thread
-                    await InvokeAsync(StateHasChanged);
-                }
-
-            }, null, 0, (int)GameServer.GameSpeed / 2);
+            await InvokeAsync(StateHasChanged);
+            return true;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-
                 await SetPlayer();
             }
             // await keyRef.FocusAsync();

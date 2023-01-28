@@ -171,9 +171,9 @@ namespace RLEngine.Core
 
 
                     }
-                    catch
+                    catch (Exception ex)
                     {
-
+                        var msg = ex.Message;
                     }
 
                 }

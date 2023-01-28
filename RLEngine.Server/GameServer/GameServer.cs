@@ -17,7 +17,7 @@ namespace RLEngine.Server
         public const int TileSize = 16;
         public const int DrawDistance = 12;
         public const int GameSpeed = 250; // ms per tick
-        public const int TicksBetweenSaves = 8;
+        public const int TicksBetweenSaves = 4;
 
         private readonly GameContext GameContext;
         private DbContextOptions<GameContext> DbOptions;
@@ -27,6 +27,8 @@ namespace RLEngine.Server
         private IList<IGameObject> Players { get; set; } = new List<IGameObject>();
 
         public long GameTick { get { return GameBoard?.GameLoop?.GameTick ?? -1; } }
+
+        private bool Saving { get; set; } = false;
 
         public GameServer(IServiceProvider services, DbContextOptions<GameContext> dbOptions, Guid? Id = null)
         {
@@ -38,7 +40,9 @@ namespace RLEngine.Server
         public async Task InitializeGameBoard()
         {
 
+            Saving = false;
             await LoadGameBoard();
+
             GameTimer = new System.Timers.Timer(GameSpeed);
             GameTimer.Elapsed += async (sender, e) => await GameLoopTick(GameBoard);
             GameTimer.Start();
@@ -47,11 +51,11 @@ namespace RLEngine.Server
 
         public async Task<bool> SaveGameBoard()
         {
-
+            if (Saving) return false;
+            Saving = true;
             var gameContext = GameContext;
-
             await gameContext.SaveChangesAsync();
-
+            Saving = false;
             return true;
 
         }

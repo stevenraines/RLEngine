@@ -15,10 +15,13 @@ namespace RLEngine.Core.Components.Scores
         [JsonInclude]
         public ScoreComposition ScoreComposition { get; set; }
 
-        public ScoreValue(int value, int? maxValue = null)
+        public ScoreValue() { }
+
+        public ScoreValue(int value, int? maxValue = null, ScoreComposition scoreComposition = ScoreComposition.Bonus)
         {
             Value = value;
             MaxValue = maxValue ?? Value;
+            ScoreComposition = scoreComposition;
         }
     }
 }

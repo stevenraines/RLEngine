@@ -10,11 +10,11 @@ namespace RLEngine.Core.Components.Scores
         [JsonInclude]
         public IDictionary<ScoreType, ScoreValue> ScoreSlots { get; set; } = new Dictionary<ScoreType, ScoreValue>();
 
-        public ScoreComponent() : base()
+
+        public ScoreComponent()
         {
         }
-
-        public ScoreComponent(Dictionary<ScoreType, ScoreValue> scoreSlots) : this()
+        public ScoreComponent(Dictionary<ScoreType, ScoreValue> scoreSlots) : base()
         {
             ScoreSlots = scoreSlots;
         }
@@ -41,16 +41,23 @@ namespace RLEngine.Core.Components.Scores
             return ScoreSlots.Where(x => x.Key == scoreType).FirstOrDefault().Value;
         }
 
+        private int GetValueModifierForType(ScoreType scoreType)
+        {
+            var scoreValue = GetScore(scoreType);
+            var equippedItemsWithComponent = GameObject.GetComponent<EquipmentComponent>()?.GetEquippedItemsByComponent<ScoreModifierComponent>();
+            if (equippedItemsWithComponent == null || scoreValue.ScoreComposition != ScoreComposition.Bonus) return 0;
+            var scoreModifierComponents = equippedItemsWithComponent.Select(x => x.GetComponent<ScoreModifierComponent>());
+            var scoreModifierComponentsForType = scoreModifierComponents.Where(x => x.ScoreType == scoreType).ToList();
+            return scoreModifierComponentsForType?.Sum(x => x.ValueModifier) ?? 0;
+
+        }
+
         public int GetCurrentValue(ScoreType scoreType)
         {
 
             var scoreValue = GetScore(scoreType);
             var value = scoreValue?.Value ?? 0;
-
-            var equippedItemsWithComponent = GameObject.GetComponent<EquipmentComponent>()?.GetEquippedItemsByComponent<ScoreModifierComponent>();
-            if (equippedItemsWithComponent == null || scoreValue.ScoreComposition != ScoreComposition.Bonus) return value;
-            var components = equippedItemsWithComponent.Select(x => x.GetComponent<ScoreModifierComponent>());
-            return value + components?.Where(x => x.ScoreType == scoreType).Sum(x => x.ValueModifier) ?? 0;
+            return value + GetValueModifierForType(scoreType);
 
         }
 
@@ -58,11 +65,7 @@ namespace RLEngine.Core.Components.Scores
         {
             var scoreValue = GetScore(scoreType);
             var maxValue = scoreValue?.Value ?? 0;
-            var equippedItemsWithComponent = GameObject.GetComponent<EquipmentComponent>()?.GetEquippedItemsByComponent<ScoreModifierComponent>();
-            if (equippedItemsWithComponent == null) return maxValue;
-            var components = equippedItemsWithComponent.Select(x => x.GetComponent<ScoreModifierComponent>());
-            return maxValue + components?.Where(x => x.ScoreType == scoreType).Sum(x => x.ValueModifier) ?? 0;
-
+            return maxValue + GetValueModifierForType(scoreType);
         }
 
     }

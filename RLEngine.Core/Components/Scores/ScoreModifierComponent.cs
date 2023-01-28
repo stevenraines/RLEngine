@@ -1,22 +1,28 @@
-using RLEngine.Core;
+using System.Text.Json.Serialization;
 using RLEngine.Core.Events;
 using RLEngine.Core.Enumerations;
 
 namespace RLEngine.Core.Components.Scores
 {
 
-
     public class ScoreModifierComponent : GameComponent
     {
 
+        [JsonInclude]
         public ScoreType ScoreType { get; set; }
 
         public event EventHandler ValueModifierChanged;
+
+        [JsonInclude]
         public int ValueModifier { get; set; }
+
+        public ScoreModifierComponent()
+        {
+        }
 
         public ScoreModifierComponent(ScoreType scoreType) : base()
         {
-            ScoreType = ScoreType;
+            ScoreType = scoreType;
         }
 
         public ScoreModifierComponent(ScoreType scoreType, int valueModifier) : this(scoreType)
