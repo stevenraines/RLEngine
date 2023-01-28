@@ -1,0 +1,24 @@
+﻿@inherits GameWindowBase
+@using RLEngine.Server.Components;
+
+<div class="gameWindow" tabindex="0" @onkeydown="HandleKeyDown">
+
+    <!-- Dialogs -->
+    <InventoryDialog OnActionSelected="ScheduleActionHandler" @ref="InventoryDialog" Items="InventoryDialogItems" Player="@player"></InventoryDialog>
+    <EquipmentDialog OnActionSelected="ScheduleActionHandler" @ref="EquipmentDialog" Player="@player"></EquipmentDialog>
+
+    <div class="terminalContainer">
+
+        <div class="terminalCell" style="grid-column: span 3;">Header</div>
+        <ScoresTerminal Player="@player" @ref="ScoresTerminal"></ScoresTerminal>
+
+        <GameTerminal Player="@player" GameBoardObjects="@GameBoardObjects"></GameTerminal>
+
+        <HistoryTerminal OnCommandChange="CommandChangeHandler" @ref="HistoryTerminal" Player="@player" OnClick="HistoryTerminalClicked"></HistoryTerminal>
+
+        <div class="terminalCell">Area B</div>
+        <StatusTerminal Player="@player" LastAction="@pressedKey"></StatusTerminal>
+        <div style="grid-column: span 3;"></div>
+    </div>
+    <input class="hiddeninput" @bind="CommandText" type="text" @ref="keyRef">
+</div>

@@ -76,9 +76,8 @@ namespace RLEngine.Server
             }, 4, -1, 0));
             gameboard.AddGameObject(ItemFactory.CreateHealthRing(gameboard, "Ring of Health", 5, 3, 1, 0));
 
-            /*
-                        gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
-            */
+            gameboard.AddGameObjects(-roomSize / 2, -roomSize / 2, RectangleRoomGenerator.Generate(roomSize, roomSize));
+
             gameboard.AddGameObject(GameObjectType.Wall, 1, 3, 0);
             gameboard.AddGameObject(GameObjectType.Wall, 3, 2, 0);
 
