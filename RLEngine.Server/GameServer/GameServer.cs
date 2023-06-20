@@ -63,7 +63,7 @@ namespace RLEngine.Server
         public IGameBoard ConfigureDefaultGameBoard()
         {
             GameLoop = new GameLoop(GameLoopType.Timed); ;
-
+            var roomSize = 10;
             var gameboard = new GameBoard(GameLoop);
             gameboard.AddGameObject(ItemFactory.CreateItem(gameboard, "Gem", new ItemComponentConfiguration() { Value = 100 }, 1, 1, 0));
             gameboard.AddGameObject(ItemFactory.CreateMeleeWeapon(gameboard, "Sword", new ItemComponentConfiguration() { Value = 10, ScoreModifiers = new List<ScoreModifierComponent>() { new ScoreModifierComponent(ScoreType.AttackScore, 2) } }, 2, 2, 0));
