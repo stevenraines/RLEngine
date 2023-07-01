@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RLEngine.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Init2 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,7 @@ namespace RLEngine.Server.Migrations
                     Layer = table.Column<int>(type: "INTEGER", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     GameBoardId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ContainerGameObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Components = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

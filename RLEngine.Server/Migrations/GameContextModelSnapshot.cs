@@ -44,12 +44,6 @@ namespace RLEngine.Server.Migrations
                     b.Property<long>("GameTick")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LoopFrequencyMS")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("NextLoop")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GameBoardId")

@@ -6,4 +6,9 @@
 ngrok http --region=us --host-header=localhost --hostname=rlengine.ngrok.io https://localhost:7083
 ```
 
-Deploy to Azure
+Deploy to Azure 2
+
+Add Migration
+```
+dotnet ef migrations add Initial-Migration --project RLEngine.Server
+```

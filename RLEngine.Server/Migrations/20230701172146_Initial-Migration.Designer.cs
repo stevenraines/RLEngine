@@ -11,8 +11,8 @@ using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20221230211426_Init3")]
-    partial class Init3
+    [Migration("20230701172146_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,12 +46,6 @@ namespace RLEngine.Server.Migrations
 
                     b.Property<long>("GameTick")
                         .HasColumnType("INTEGER");
-
-                    b.Property<int>("LoopFrequencyMS")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("NextLoop")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
