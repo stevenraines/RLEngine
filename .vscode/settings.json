@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/c597c117-7809-4208-afe5-dccb956d83bd/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.Web/sites/RLEngine",
+    "appService.deploySubpath": "."
+}

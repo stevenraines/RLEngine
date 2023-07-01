@@ -44,7 +44,7 @@ namespace RLEngine.Server.Components
         {
             if (player == null) return false;
 
-            if (args.EventsProcessed == 0 && args.GameTick % 10 != 0) return true;
+            //if (args.EventsProcessed == 0 && args.GameTick %2 != 0) return true;
             GameBoardObjects = GameServer.GetGameBoardObjectsToRender(player.X, player.Y, player.Z);
             await InvokeAsync(StateHasChanged);
             return true;
@@ -113,7 +113,7 @@ namespace RLEngine.Server.Components
 
         }
 
-        protected void HandleKeyDown(KeyboardEventArgs e)
+        protected async Task HandleKeyDown(KeyboardEventArgs e)
         {
 
             if (player == null) return;

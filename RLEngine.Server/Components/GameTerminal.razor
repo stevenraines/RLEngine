@@ -6,16 +6,7 @@
 
 <div class="terminalCell">
     <div class="GameboardView" style="@GridColumnString">
-    @foreach (var gameBoardObject in GameBoardObjects)
-    {
-        var positionType = gameBoardObject?.Type ?? GameObjectType.None;
-        MarkupString str = (MarkupString) ((char)(int)positionType).ToString();
-        if(positionType == GameObjectType.None) str = (MarkupString) "&nbsp;";
-        MarkupString cssClass = (MarkupString) $"GameBoardCell ascii {Enum.GetName(positionType)}".ToString();
-        <div data-position-x="@gameBoardObject.X"
-             data-position-y="@gameBoardObject.Y"
-             class="@cssClass">@str</div>
-    }
+        @RenderView()
     </div>
 </div>
 

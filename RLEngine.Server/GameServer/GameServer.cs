@@ -9,13 +9,15 @@ using RLEngine.Core.Components;
 using RLEngine.Core.Components.Scores;
 using RLEngine.Core.Factories;
 using RLEngine.Server.Infrastructure;
+using System.Numerics;
+
 namespace RLEngine.Server
 {
     public class GameServer
     {
 
         public const int TileSize = 16;
-        public const int DrawDistance = 12;
+        public const int DrawDistance = 10;
         public const int GameSpeed = 100; // ms per tick
         public const int TicksPerSecond = 1000 / GameSpeed;
         public const int TicksBetweenSaves = 60 * TicksPerSecond;
@@ -43,7 +45,7 @@ namespace RLEngine.Server
 
             Saving = false;
             await LoadGameBoard();
-
+       
             GameTimer = new System.Timers.Timer(GameSpeed);
             GameTimer.Elapsed += async (sender, e) => await GameLoopTick(GameBoard);
             GameTimer.Start();
@@ -106,7 +108,7 @@ namespace RLEngine.Server
 
             GameLoop = GameBoard.GameLoop;
 
-
+  
             return GameBoard;
         }
 
@@ -135,7 +137,7 @@ namespace RLEngine.Server
         {
             gameBoard.GameLoop.ExecuteActions();
             if (GameBoard.GameLoop.GameTick > 0 && GameBoard.GameLoop.GameTick % TicksBetweenSaves == 0)
-                await SaveGameBoard();
+               await SaveGameBoard();
             return true;
         }
 
@@ -151,10 +153,9 @@ namespace RLEngine.Server
             if (moveDirection != Direction.None)
             {
                 var scheduledAction = new ScheduledAction(player.Id, new MoveAction(player, moveDirection));
-                GameBoard.GameLoop.ScheduleAction(scheduledAction);
-
+                 GameBoard.GameLoop.ScheduleAction(scheduledAction);
             }
-
+        
             return true;
 
         }
