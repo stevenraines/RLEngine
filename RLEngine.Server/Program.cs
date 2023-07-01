@@ -6,7 +6,7 @@ using RLEngine.Server.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextFactory<GameContext>(opt =>
-    opt.UseSqlite($"Data Source={nameof(GameContext)}.db")
+    opt.UseSqlite($"Data Source={nameof(GameContext)}.db;Pooling=True")
     .EnableSensitiveDataLogging(false)
     .EnableDetailedErrors(false));
 
