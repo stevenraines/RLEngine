@@ -5,3 +5,5 @@
 ```
 ngrok http --region=us --host-header=localhost --hostname=rlengine.ngrok.io https://localhost:7083
 ```
+
+Deploy to Azure
