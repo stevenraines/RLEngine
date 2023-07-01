@@ -12,10 +12,6 @@ builder.Services.AddDbContextFactory<GameContext>(opt =>
     .EnableSensitiveDataLogging(false)
     .EnableDetailedErrors(false));
 
-// Add services to the container.
-builder.WebHost.UseIISIntegration()
-                .UseKestrel();
-
 builder.Services.AddRazorPages();
 
 builder.Services.AddServerSideBlazor();
