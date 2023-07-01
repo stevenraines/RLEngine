@@ -6,7 +6,7 @@
 ngrok http --region=us --host-header=localhost --hostname=rlengine.ngrok.io https://localhost:7083
 ```
 
-Deploy to Azure 2
+Deploy to Azure 3
 
 Add Migration
 ```
