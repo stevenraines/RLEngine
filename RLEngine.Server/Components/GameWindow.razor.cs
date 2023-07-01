@@ -113,7 +113,7 @@ namespace RLEngine.Server.Components
 
         }
 
-        protected async Task HandleKeyDown(KeyboardEventArgs e)
+        protected void HandleKeyDown(KeyboardEventArgs e)
         {
 
             if (player == null) return;

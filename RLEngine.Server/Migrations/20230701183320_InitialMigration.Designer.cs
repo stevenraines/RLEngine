@@ -11,7 +11,7 @@ using RLEngine.Server.Infrastructure;
 namespace RLEngine.Server.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20230701172146_Initial-Migration")]
+    [Migration("20230701183320_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

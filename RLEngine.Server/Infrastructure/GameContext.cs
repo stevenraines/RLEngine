@@ -14,8 +14,7 @@ namespace RLEngine.Server.Infrastructure
 
         public GameContext(DbContextOptions<GameContext> options) : base(options)
         {
-            Database.OpenConnection();
-            Database.EnsureCreated();
+    
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,10 +49,6 @@ namespace RLEngine.Server.Infrastructure
             base.OnModelCreating(modelBuilder);
         }
 
-        public override void Dispose()
-        {
-            Database.CloseConnection();
-            base.Dispose();
-        }
+      
     }
 }

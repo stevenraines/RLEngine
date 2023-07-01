@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextFactory<GameContext>(opt =>
-    opt.UseSqlite($"Data Source={nameof(GameContext)}.db;Pooling=True")
+    opt.UseSqlite($"Data Source={nameof(GameContext)}.db")
     .EnableSensitiveDataLogging(false)
     .EnableDetailedErrors(false));
 
