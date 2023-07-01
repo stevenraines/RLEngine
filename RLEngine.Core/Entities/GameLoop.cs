@@ -4,22 +4,22 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RLEngine.Core.Enumerations;
+using RLEngine.Core.Events;
+using static RLEngine.Core.IGameLoop;
 
 namespace RLEngine.Core
 {
 
     public class GameLoop : IGameLoop
-    {
-        public event EventHandler GameTickProcessed;
+    { 
+
+        public event GameTickProcessedHandler GameTickProcessed;
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public GameLoopType Type { get; }
         public Guid GameBoardId { get; set; }
         public IGameBoard GameBoard { get; set; }
-        public int LoopFrequencyMS { get; set; } = 5000;
         public bool GameLoopRunning { get; set; } = false;
-
-        public DateTime NextLoop { get; set; }
-
         public long GameTick { get; set; } = 0;
 
         public IList<IScheduledAction> ScheduledActions { get; } = new List<IScheduledAction>();
@@ -33,7 +33,7 @@ namespace RLEngine.Core
 
         public void ScheduleAction(IScheduledAction scheduledAction)
         {
-            scheduledAction.ExecuteAt = GameTick += 1;
+            scheduledAction.ExecuteAt = GameTick;
             if (!ScheduledActions.Any(a => a.OwnerId == scheduledAction.OwnerId))
                 ScheduledActions.Add(scheduledAction);
         }
@@ -51,7 +51,7 @@ namespace RLEngine.Core
                 var actionsToExecute = ScheduledActions.Where(x => x.ExecuteAt <= GameTick).ToList();
 
                 var uniqueGameObjects = actionsToExecute.Select(a => a.OwnerId).Distinct();
-
+                
                 foreach (var gameObjectId in uniqueGameObjects)
                 {
                     IScheduledAction scheduledAction = actionsToExecute.Where(a => a.OwnerId == gameObjectId).FirstOrDefault();
@@ -59,10 +59,14 @@ namespace RLEngine.Core
                     ScheduledActions.Remove(scheduledAction);
                 }
 
-                NextLoop = executeStartTime.AddMilliseconds(LoopFrequencyMS);
+                var args = new GameTickProcessedEventArgs() {
+                    EventsProcessed = actionsToExecute.Count,
+                    GameTick = GameTick
+                };
 
+
+                GameTickProcessed.Invoke(this, args );
                 GameTick += 1;
-                GameTickProcessed.Invoke(this, new EventArgs());
 
             }
             finally

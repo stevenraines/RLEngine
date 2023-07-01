@@ -2,13 +2,15 @@ using RLEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using RLEngine.Core.Enumerations;
+using RLEngine.Core.Events;
 
 namespace RLEngine.Core
 {
 
     public interface IGameLoop
     {
-        event EventHandler GameTickProcessed;
+        public event GameTickProcessedHandler GameTickProcessed;
+        public delegate void GameTickProcessedHandler(object? sender, GameTickProcessedEventArgs e);
 
         GameLoopType Type { get; }
         long GameTick { get; set; }

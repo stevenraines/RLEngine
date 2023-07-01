@@ -14,8 +14,7 @@ namespace RLEngine.Server
 
         [Parameter] public EventCallback<IAction> OnActionSelected { get; set; }
 
-
-        [Parameter]
+[Parameter]
         public InventoryDialogMode Mode { get; set; } = InventoryDialogMode.Player;
 
         public InventoryDialogStep Step

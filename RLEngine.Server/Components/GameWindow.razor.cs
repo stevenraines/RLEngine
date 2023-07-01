@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
 using RLEngine.Core;
 using RLEngine.Core.Components;
-
+using RLEngine.Core.Events;
 
 namespace RLEngine.Server.Components
 {
@@ -17,10 +17,7 @@ namespace RLEngine.Server.Components
         protected InventoryDialog InventoryDialog { get; set; }
         protected EquipmentDialog EquipmentDialog { get; set; }
         protected HistoryTerminal HistoryTerminal { get; set; }
-
         protected ScoresTerminal ScoresTerminal { get; set; }
-
-        protected System.Threading.Timer timer = null;
         protected long lastTick;
         protected string CommandText { get; set; } = "";
         protected IList<IGameObject> GameBoardObjects = new List<IGameObject>();
@@ -41,15 +38,14 @@ namespace RLEngine.Server.Components
 
             GameServer.GameBoard.GameLoop.GameTickProcessed += async (s, e) => await HandleGameLoopComplete(s, e);
 
-
         }
 
-        public async Task<bool> HandleGameLoopComplete(object sender, EventArgs args)
+        public async Task<bool> HandleGameLoopComplete(object sender, GameTickProcessedEventArgs args)
         {
             if (player == null) return false;
 
+            if (args.EventsProcessed == 0 && args.GameTick % 10 != 0) return true;
             GameBoardObjects = GameServer.GetGameBoardObjectsToRender(player.X, player.Y, player.Z);
-
             await InvokeAsync(StateHasChanged);
             return true;
         }
@@ -119,7 +115,6 @@ namespace RLEngine.Server.Components
 
         protected void HandleKeyDown(KeyboardEventArgs e)
         {
-
 
             if (player == null) return;
 

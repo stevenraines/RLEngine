@@ -16,8 +16,9 @@ namespace RLEngine.Server
 
         public const int TileSize = 16;
         public const int DrawDistance = 12;
-        public const int GameSpeed = 250; // ms per tick
-        public const int TicksBetweenSaves = 4;
+        public const int GameSpeed = 100; // ms per tick
+        public const int TicksPerSecond = 1000 / GameSpeed;
+        public const int TicksBetweenSaves = 60 * TicksPerSecond;
 
         private readonly GameContext GameContext;
         private DbContextOptions<GameContext> DbOptions;

@@ -29,9 +29,7 @@ namespace RLEngine.Server.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     GameBoardId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LoopFrequencyMS = table.Column<int>(type: "INTEGER", nullable: false),
                     GameLoopRunning = table.Column<bool>(type: "INTEGER", nullable: false),
-                    NextLoop = table.Column<DateTime>(type: "TEXT", nullable: false),
                     GameTick = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

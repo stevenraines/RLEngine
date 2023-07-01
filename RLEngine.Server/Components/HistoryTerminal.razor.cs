@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
+using System.Linq;
 using RLEngine.Core;
 using RLEngine.Core.Components;
 using RLEngine.Server;
@@ -56,10 +57,10 @@ namespace RLEngine.Server
 
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override void OnAfterRender(bool firstRender)
         {
             if (Player != null)
-                Messages = String.Join("\n", Player.Messages.Where(x => !String.IsNullOrWhiteSpace(x.Message))
+                Messages = String.Join("\n",  Player.Messages.Where(x => !String.IsNullOrWhiteSpace(x.Message))
                                                             .OrderByDescending(x => x.GameTick)
                                                             .Take(10)
                                                             .OrderBy(x => x.GameTick)
